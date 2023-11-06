@@ -1,6 +1,6 @@
 # Use the official maven/Java 11 image to create a build artifact.
 # https://hub.docker.com/_/maven
-FROM maven:3-jdk-11-slim AS build-env
+FROM maven:3.8.1-openjdk-17-slim AS build-env
 
 # Set the working directory to /app
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY pom.xml ./
 # Copy local code to the container image.
 COPY src ./src
-COPY .configs/*.properties ./src/main/resources
+COPY .configs/*.properties ./src/main/resources/
 
 # Download dependencies and build a release artifact.
 RUN mvn package -DskipTests
@@ -16,7 +16,7 @@ RUN mvn package -DskipTests
 # Use OpenJDK for base image.
 # https://hub.docker.com/_/openjdk
 # https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
-FROM openjdk:11.0.16-jre-slim
+FROM amazoncorretto:17
 
 # Copy the jar to the production image from the builder stage.
 COPY --from=build-env /app/target/app-test-*.jar /app-test.jar

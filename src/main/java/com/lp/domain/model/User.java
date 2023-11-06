@@ -67,7 +67,7 @@ public class User extends AbstractEntity {
         return status;
     }
 
-    public void setStatus(UserStatus $status) {
-        this.status = $status;
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
 }

@@ -4,11 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.Collections;
 
 /** This class serves as an entry point for the Spring Boot app. */
-@SpringBootApplication(scanBasePackages = "cloudcode.helloworld.web")
+@SpringBootApplication(scanBasePackages = {
+        "cloudcode.helloworld.web",
+        "com.lp.domain"
+})
+@EntityScan(basePackages = "com.lp.domain")
+@EnableJpaRepositories(basePackages = "com.lp.domain")
 public class TestApplication {
 
   private static final Logger logger = LoggerFactory.getLogger(TestApplication.class);
