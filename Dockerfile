@@ -8,7 +8,6 @@ WORKDIR /app
 COPY pom.xml ./
 # Copy local code to the container image.
 COPY src ./src
-COPY .configs/*.properties ./src/main/resources/
 
 # Download dependencies and build a release artifact.
 RUN mvn package -DskipTests
@@ -16,7 +15,7 @@ RUN mvn package -DskipTests
 # Use OpenJDK for base image.
 # https://hub.docker.com/_/openjdk
 # https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
-FROM amazoncorretto:17
+FROM openjdk:17
 
 # Copy the jar to the production image from the builder stage.
 COPY --from=build-env /app/target/app-test-*.jar /app-test.jar
