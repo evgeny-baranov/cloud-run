@@ -1,8 +1,9 @@
 package com.lp.secrets;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
-@Repository
+@Component
 public interface CredentialsRepository {
+
     String getSecretData(String secretName) throws Exception;
 }

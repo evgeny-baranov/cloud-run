@@ -1,7 +1,6 @@
 package com.lp.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "oauth_provider", catalog = "testdb")

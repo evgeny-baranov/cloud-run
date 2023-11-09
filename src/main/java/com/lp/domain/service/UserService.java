@@ -1,8 +1,6 @@
 package com.lp.domain.service;
 
-import com.lp.domain.model.RoleEnum;
-import com.lp.domain.model.User;
-import com.lp.domain.model.UserRole;
+import com.lp.domain.model.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

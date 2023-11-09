@@ -1,10 +1,7 @@
 package com.lp.domain.service;
 
 import com.lp.domain.model.*;
-import com.lp.domain.repository.OauthProviderRepository;
-import com.lp.domain.repository.RoleRepository;
-import com.lp.domain.repository.UserRepository;
-import com.lp.domain.repository.UserRoleRepository;
+import com.lp.domain.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
