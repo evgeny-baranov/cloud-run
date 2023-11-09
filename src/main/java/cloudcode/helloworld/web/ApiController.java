@@ -23,6 +23,11 @@ public class ApiController {
 
     @GetMapping("/test2")
     public String getTest2Response() {
+        return applicationFake;
+    }
+
+    @GetMapping("/test3")
+    public String getTest3Response() {
         return githubCredentials;
     }
 }
