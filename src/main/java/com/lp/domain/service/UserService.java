@@ -7,17 +7,20 @@ import java.util.Optional;
 
 @Service
 public interface UserService {
-    public User createUser(String name, String email);
 
-    public void addUserRole(User user, RoleEnum role);
+    public User saveUser(User user);
 
     Iterable<User> getAllUsers();
 
-    public Iterable<UserRole> getAllRoles();
+    public Iterable<Role> getAllRoles();
+
+    public Iterable<Status> getAllStatuses();
 
     public void initRoles();
 
-    public void initOauthProviders();
+    public void initUserStatuses();
 
     public Optional<User> findByEmail(String email);
+
+    public Optional<User> findById(Long id);
 }

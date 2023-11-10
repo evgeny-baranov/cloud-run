@@ -1,18 +1,14 @@
 package com.lp.domain.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "customer", catalog = "testdb")
+@Getter
+@Setter
 public class Customer extends AbstractEntity {
 
     private String name;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

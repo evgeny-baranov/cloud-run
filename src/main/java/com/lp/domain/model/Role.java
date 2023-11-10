@@ -1,15 +1,25 @@
 package com.lp.domain.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "role", catalog = "testdb")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role extends AbstractEntity {
     @Enumerated(EnumType.STRING)
+    @Column(unique = true)
     private RoleEnum name;
 
     @OneToMany(
@@ -18,13 +28,10 @@ public class Role extends AbstractEntity {
             orphanRemoval = true,
             fetch = FetchType.EAGER
     )
+    @JsonIgnore
     private Set<UserRole> userRoles = new HashSet<>();
 
-    public RoleEnum getName() {
-        return name;
-    }
-
-    public void setName(RoleEnum name) {
+    public Role(RoleEnum name) {
         this.name = name;
     }
 }
