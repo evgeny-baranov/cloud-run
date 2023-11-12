@@ -8,19 +8,24 @@ import java.util.Optional;
 @Service
 public interface UserService {
 
-    public User saveUser(User user);
+    User saveUser(User user);
 
-    Iterable<User> getAllUsers();
+    Iterable<User> getAllUsers(
+            int page,
+            int size,
+            String sortBy,
+            String direction
+    );
 
-    public Iterable<Role> getAllRoles();
+    Iterable<Role> getAllRoles();
 
-    public Iterable<Status> getAllStatuses();
+    Iterable<Status> getAllStatuses();
 
-    public void initRoles();
+    void initRoles();
 
-    public void initUserStatuses();
+    void initUserStatuses();
 
-    public Optional<User> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-    public Optional<User> findById(Long id);
+    Optional<User> findById(Long id);
 }

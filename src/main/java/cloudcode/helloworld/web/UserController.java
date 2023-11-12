@@ -1,18 +1,18 @@
 package cloudcode.helloworld.web;
 
 import cloudcode.helloworld.web.dto.DtoMapper;
+import cloudcode.helloworld.web.dto.PageDto;
 import cloudcode.helloworld.web.dto.UserDto;
 import com.lp.domain.model.Role;
-import com.lp.domain.model.User;
+import com.lp.domain.model.SortDirectionEnum;
 import com.lp.domain.model.Status;
+import com.lp.domain.model.User;
 import com.lp.domain.service.UserService;
 import lombok.extern.java.Log;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/user")
@@ -39,14 +39,23 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    Set<UserDto> getUserListResponse() {
-        Set<UserDto> dto = new HashSet<>();
+    PageDto<UserDto> getUserListResponse(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "ASC") SortDirectionEnum sortDirection) {
+        PageDto<UserDto> dto = new PageDto<>();
+        dto.setPageNum(page);
+        dto.setSortBy(sortBy);
+        dto.setSortDirection(sortDirection);
 
-        userService.getAllUsers().forEach(user -> {
-            dto.add(
-                    this.dtoMapper.mapUserToDto(user)
-            );
-        });
+        userService.getAllUsers(
+                page-1,
+                10,
+                sortBy,
+                sortDirection.name()
+        ).forEach(user -> dto.getData().add(
+                this.dtoMapper.mapUserToDto(user)
+        ));
 
         return dto;
     }
@@ -68,12 +77,12 @@ public class UserController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     UserDto postUserResponse(@RequestBody UserDto userDto) {
-        log.info(userDto.toString());
-        log.info(dtoMapper.mapDtoToUser(userDto).toString());
-//        return userDto;
         return dtoMapper.mapUserToDto(
                 userService.saveUser(
-                        dtoMapper.mapDtoToUser(userDto)
+                        dtoMapper.mapDtoToUser(
+                                new User(),
+                                userDto
+                        )
                 )
         );
     }
@@ -83,7 +92,18 @@ public class UserController {
             @PathVariable("id") Long id,
             @RequestBody UserDto userDto
     ) {
-        log.info(userDto.toString());
-        return userDto;
+        Optional<User> optionalUser = userService.findById(id);
+        if (optionalUser.isEmpty()) {
+            throw new IllegalArgumentException("User [" + id + "] not found");
+        }
+
+        return dtoMapper.mapUserToDto(
+                userService.saveUser(
+                        dtoMapper.mapDtoToUser(
+                                optionalUser.get(),
+                                userDto
+                        )
+                )
+        );
     }
 }

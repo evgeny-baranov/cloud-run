@@ -6,17 +6,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-import java.util.Set;
+import java.util.Collection;
+import java.util.HashSet;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
-    private Long id;
+@SuperBuilder
+public class UserDto extends Dto {
     private String name;
     private String email;
-    private Set<RoleEnum> roles;
+    private Collection<RoleEnum> roles = new HashSet<>();
     private StatusEnum status;
 }

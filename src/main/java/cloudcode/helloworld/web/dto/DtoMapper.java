@@ -3,32 +3,27 @@ package cloudcode.helloworld.web.dto;
 import com.lp.domain.model.*;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class DtoMapper {
-    public User mapDtoToUser(UserDto dto) {
-        User user = new User(
-                dto.getName(),
-                dto.getEmail(),
-                dto.getStatus()
-        );
+    public User mapDtoToUser(User user, UserDto dto) {
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        user.setStatus(new Status(dto.getStatus()));
 
         dto.getRoles().forEach(roleEnum -> {
-            Role role = new Role(roleEnum);
-            user.addRole(role);
+            user.addRole(new Role(roleEnum));
         });
 
         return user;
     }
 
-    public Set<RoleEnum> mapRoleSetToDto(Set<UserRole> roles) {
-        Set<RoleEnum> set = new HashSet<RoleEnum>();
+    public Collection<RoleEnum> mapRoleSetToDto(Collection<UserRole> roles) {
+        Collection<RoleEnum> set = new HashSet<>();
 
-        roles.forEach(userRole -> {
-            set.add(userRole.getRole().getName());
-        });
+        roles.forEach(userRole -> set.add(userRole.getRole().getName()));
 
         return set;
     }
@@ -38,12 +33,12 @@ public class DtoMapper {
     }
 
     public UserDto mapUserToDto(User user) {
-        return new UserDto(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                mapRoleSetToDto(user.getRoles()),
-                mapUserStatusToDto(user.getStatus())
-        );
+        return UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .roles(mapRoleSetToDto(user.getRoles()))
+                .status(mapUserStatusToDto(user.getStatus()))
+                .build();
     }
 }

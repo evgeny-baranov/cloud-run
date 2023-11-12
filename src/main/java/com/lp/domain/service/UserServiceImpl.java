@@ -2,56 +2,82 @@ package com.lp.domain.service;
 
 import com.lp.domain.model.*;
 import com.lp.domain.repository.RoleRepository;
+import com.lp.domain.repository.StatusRepository;
 import com.lp.domain.repository.UserRepository;
 import com.lp.domain.repository.UserRoleRepository;
-import com.lp.domain.repository.UserStatusRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
+import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Optional;
 
 @Service
+@Log
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
+
 
     private final RoleRepository roleRepository;
 
     private final UserRoleRepository userRoleRepository;
 
-    private final UserStatusRepository userStatusRepository;
+    private final StatusRepository statusRepository;
 
+    @Autowired
     public UserServiceImpl(
             UserRepository userRepository,
             RoleRepository roleRepository,
             UserRoleRepository userRoleRepository,
-            UserStatusRepository userStatusRepository) {
+            StatusRepository userStatusRepository
+    ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
-        this.userStatusRepository = userStatusRepository;
+        this.statusRepository = userStatusRepository;
     }
 
+    @Transactional
     public User saveUser(User user) {
-        if (user.getStatus().getId() == null) {
-            userStatusRepository.findByName(
-                    user.getStatus().getName()
-            ).ifPresent(user::setStatus);
-        }
+        statusRepository.findByName(user.getStatus().getName()).ifPresentOrElse(
+                user::setStatus,
+                () -> {
+                    Status newStatus = new Status(user.getStatus().getName());
+                    statusRepository.save(newStatus);
+                    user.setStatus(newStatus);
+                }
+        );
 
         user.getRoles().forEach(userRole -> {
-            if (userRole.getRole().getId() == null) {
-                roleRepository.findByName(
-                        userRole.getRole().getName()
-                ).ifPresent(userRole::setRole);
-            }
+            roleRepository.findByName(
+                    userRole.getRole().getName()
+            ).ifPresent(userRole::setRole);
         });
 
         return userRepository.save(user);
     }
 
-    public Iterable<User> getAllUsers() {
-        return userRepository.findAll();
+    public Iterable<User> getAllUsers(
+            int page,
+            int size,
+            String sortBy,
+            String direction
+    ) {
+        return userRepository.findAll(
+                PageRequest.of(
+                        page,
+                        size,
+                        Sort.by(
+                                Sort.Direction.fromString(direction),
+                                sortBy
+                        )
+                )
+        );
     }
 
     public Iterable<Role> getAllRoles() {
@@ -59,7 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Iterable<Status> getAllStatuses() {
-        return userStatusRepository.findAll();
+        return statusRepository.findAll();
     }
 
     public Optional<User> findByEmail(String email) {
@@ -74,6 +100,29 @@ public class UserServiceImpl implements UserService {
     public void init() {
         initRoles();
         initUserStatuses();
+        initWithTestUsers();
+    }
+
+    public void initWithTestUsers() {
+//        for (int i = 0; i < 35; i++) {
+//            log.info(StatusEnum.values()[i % StatusEnum.values().length].name());
+//            log.info(RoleEnum.values()[i % RoleEnum.values().length].name());
+
+
+//            User user = new User(
+//                    "User Name" + i,
+//                    "email_" + i + "@domain.com",
+//                    statusRepository.findByName(
+//                            StatusEnum.values()[i % StatusEnum.values().length]
+//                    ).get().getName()
+//            );
+//
+//            user.addRole(new Role(RoleEnum.values()[
+//                    i % RoleEnum.values().length
+//                    ]));
+//
+//            this.saveUser(user);
+//        }
     }
 
     public void initRoles() {
@@ -88,8 +137,8 @@ public class UserServiceImpl implements UserService {
 
     public void initUserStatuses() {
         Arrays.stream(StatusEnum.values()).forEach(statusName -> {
-            if (userStatusRepository.findByName(statusName).isEmpty()) {
-                this.userStatusRepository.save(
+            if (statusRepository.findByName(statusName).isEmpty()) {
+                this.statusRepository.save(
                         new Status(statusName)
                 );
             }

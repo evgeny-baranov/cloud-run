@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "users", catalog = "testdb")
@@ -19,29 +19,44 @@ public class User extends AbstractEntity {
 
     private String name;
 
+    @Column(unique = true)
     private String email;
 
     @ManyToOne(
-            cascade = CascadeType.PERSIST,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             fetch = FetchType.EAGER
     )
     private Status status;
 
     @OneToMany(
             mappedBy = "user",
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            fetch = FetchType.EAGER
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            orphanRemoval = true
     )
-    private Set<UserRole> roles = new HashSet<>();
+    private Collection<UserRole> roles = new HashSet<>();
+
+    public boolean haveRole(Role role) {
+        for (UserRole userRole : roles) {
+            if (userRole.getRole().equals(role)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean haveRole(RoleEnum roleName) {
+        return haveRole(new Role(roleName));
+    }
 
     public void addRole(Role role) {
-        UserRole ur = new UserRole();
-        ur.setUser(this);
-        ur.setRole(role);
-        roles.add(ur);
+        if (!haveRole(role)) {
+            UserRole ur = new UserRole();
+            ur.setUser(this);
+            ur.setRole(role);
+            roles.add(ur);
+        }
     }
 
     public User(String name, String email) {
