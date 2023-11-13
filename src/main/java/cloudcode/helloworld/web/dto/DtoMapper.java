@@ -13,9 +13,7 @@ public class DtoMapper {
         user.setEmail(dto.getEmail());
         user.setStatus(new Status(dto.getStatus()));
 
-        dto.getRoles().forEach(roleEnum -> {
-            user.addRole(new Role(roleEnum));
-        });
+        dto.getRoles().forEach(roleEnum -> user.addRole(new Role(roleEnum)));
 
         return user;
     }

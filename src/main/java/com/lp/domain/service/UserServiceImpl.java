@@ -8,7 +8,6 @@ import com.lp.domain.repository.UserRoleRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,6 @@ public class UserServiceImpl implements UserService {
 
     private final StatusRepository statusRepository;
 
-    @Autowired
     public UserServiceImpl(
             UserRepository userRepository,
             RoleRepository roleRepository,
@@ -53,11 +51,9 @@ public class UserServiceImpl implements UserService {
                 }
         );
 
-        user.getRoles().forEach(userRole -> {
-            roleRepository.findByName(
-                    userRole.getRole().getName()
-            ).ifPresent(userRole::setRole);
-        });
+        user.getRoles().forEach(userRole -> roleRepository.findByName(
+                userRole.getRole().getName()
+        ).ifPresent(userRole::setRole));
 
         return userRepository.save(user);
     }
