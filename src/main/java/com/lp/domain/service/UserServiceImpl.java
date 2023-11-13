@@ -4,16 +4,14 @@ import com.lp.domain.model.*;
 import com.lp.domain.repository.RoleRepository;
 import com.lp.domain.repository.StatusRepository;
 import com.lp.domain.repository.UserRepository;
-import com.lp.domain.repository.UserRoleRepository;
 import jakarta.annotation.PostConstruct;
-import jakarta.transaction.Transactional;
 import lombok.extern.java.Log;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Log
@@ -21,44 +19,56 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-
     private final RoleRepository roleRepository;
 
-    private final UserRoleRepository userRoleRepository;
+    private final GenericCache<Status, StatusEnum, StatusRepository> statusCache;
+
+    private final GenericCache<Role, RoleEnum, RoleRepository> roleCache;
 
     private final StatusRepository statusRepository;
 
     public UserServiceImpl(
             UserRepository userRepository,
             RoleRepository roleRepository,
-            UserRoleRepository userRoleRepository,
-            StatusRepository userStatusRepository
+            GenericCache<Role, RoleEnum, RoleRepository> roleCache,
+            StatusRepository userStatusRepository,
+            GenericCache<Status, StatusEnum, StatusRepository> statusCache
     ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.userRoleRepository = userRoleRepository;
         this.statusRepository = userStatusRepository;
+        this.statusCache = statusCache;
+        this.roleCache = roleCache;
     }
 
-    @Transactional
     public User saveUser(User user) {
-        statusRepository.findByName(user.getStatus().getName()).ifPresentOrElse(
-                user::setStatus,
-                () -> {
-                    Status newStatus = new Status(user.getStatus().getName());
-                    statusRepository.save(newStatus);
-                    user.setStatus(newStatus);
-                }
-        );
+        Status status = statusCache.get(
+                user.getStatus().getName()
+        ).orElseGet(() -> {
+            Status newStatus = statusRepository.save(
+                    new Status(user.getStatus().getName()
+                    )
+            );
+            statusCache.add(newStatus);
+            return newStatus;
+        });
 
-        user.getRoles().forEach(userRole -> roleRepository.findByName(
-                userRole.getRole().getName()
-        ).ifPresent(userRole::setRole));
+        user.setStatus(status);
+
+        Collection<UserRole> roles = new HashSet<>(user.getRoles());
+        user.setRoles(new HashSet<>());
+
+        roles.forEach(userRole -> {
+            roleCache.get(
+                    userRole.getRole().getName()
+            ).ifPresent(userRole::setRole);
+            user.getRoles().add(userRole);
+        });
 
         return userRepository.save(user);
     }
 
-    public Iterable<User> getAllUsers(
+    public Page<User> getAllUsers(
             int page,
             int size,
             String sortBy,
@@ -66,7 +76,7 @@ public class UserServiceImpl implements UserService {
     ) {
         return userRepository.findAll(
                 PageRequest.of(
-                        page,
+                        page - 1,
                         size,
                         Sort.by(
                                 Sort.Direction.fromString(direction),
@@ -77,11 +87,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public Iterable<Role> getAllRoles() {
-        return roleRepository.findAll();
+        return roleCache.getAll();
     }
 
     public Iterable<Status> getAllStatuses() {
-        return statusRepository.findAll();
+        return statusCache.getAll();
     }
 
     public Optional<User> findByEmail(String email) {
@@ -92,46 +102,45 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id);
     }
 
-    @PostConstruct
-    public void init() {
-        initRoles();
-        initUserStatuses();
-        initWithTestUsers();
+    public Optional<User> findById(UUID uuid) {
+        return userRepository.findByUuid(uuid);
     }
 
-    public void initWithTestUsers() {
-//        for (int i = 0; i < 35; i++) {
-//            log.info(StatusEnum.values()[i % StatusEnum.values().length].name());
-//            log.info(RoleEnum.values()[i % RoleEnum.values().length].name());
+    @PostConstruct
+    public void init() {
+        try {
+            initRoles();
+            initStatuses();
+            initSystemUser();
+        } catch (Throwable error) {
+            log.info(error.getMessage());
+        }
+    }
 
-
-//            User user = new User(
-//                    "User Name" + i,
-//                    "email_" + i + "@domain.com",
-//                    statusRepository.findByName(
-//                            StatusEnum.values()[i % StatusEnum.values().length]
-//                    ).get().getName()
-//            );
-//
-//            user.addRole(new Role(RoleEnum.values()[
-//                    i % RoleEnum.values().length
-//                    ]));
-//
-//            this.saveUser(user);
-//        }
+    public void initSystemUser() {
+        // TODO: save system users to secrets
+        User user = new User(
+                "system",
+                "info@baranov.eu"
+        );
+        user.setStatus(StatusEnum.STATUS_ACTIVE);
+        Arrays.stream(RoleEnum.values()).forEach(user::addRole);
+        saveUser(user);
     }
 
     public void initRoles() {
         Arrays.stream(RoleEnum.values()).forEach(roleName -> {
-            if (this.roleRepository.findByName(roleName).isEmpty()) {
-                this.roleRepository.save(
+            if (roleRepository.findByName(roleName).isEmpty()) {
+                roleRepository.save(
                         new Role(roleName)
                 );
             }
         });
+
+        roleCache.refresh();
     }
 
-    public void initUserStatuses() {
+    public void initStatuses() {
         Arrays.stream(StatusEnum.values()).forEach(statusName -> {
             if (statusRepository.findByName(statusName).isEmpty()) {
                 this.statusRepository.save(
@@ -139,5 +148,7 @@ public class UserServiceImpl implements UserService {
                 );
             }
         });
+
+        statusCache.refresh();
     }
 }

@@ -32,7 +32,7 @@ public class Role extends AbstractEntity {
     @JsonIgnore
     private Collection<UserRole> userRoles = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "roles_privileges",
             joinColumns = @JoinColumn(

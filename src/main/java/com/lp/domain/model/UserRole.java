@@ -32,7 +32,7 @@ public class UserRole extends AbstractEntity {
     private User user;
 
     @ManyToOne(
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+            cascade = CascadeType.MERGE
     )
     @JoinColumn(name = "role_id")
     private Role role;

@@ -15,7 +15,7 @@ import java.util.HashSet;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends AbstractEntity {
+public class User extends AbstractUuidEntity {
 
     private String name;
 
@@ -23,10 +23,18 @@ public class User extends AbstractEntity {
     private String email;
 
     @ManyToOne(
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            cascade = CascadeType.MERGE,
             fetch = FetchType.EAGER
     )
     private Status status;
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setStatus(StatusEnum statusName) {
+        setStatus(new Status(statusName));
+    }
 
     @OneToMany(
             mappedBy = "user",
@@ -48,6 +56,10 @@ public class User extends AbstractEntity {
 
     public boolean haveRole(RoleEnum roleName) {
         return haveRole(new Role(roleName));
+    }
+
+    public void addRole(RoleEnum roleName) {
+        addRole(new Role(roleName));
     }
 
     public void addRole(Role role) {

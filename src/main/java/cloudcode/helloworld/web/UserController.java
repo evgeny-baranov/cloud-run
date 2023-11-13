@@ -4,7 +4,6 @@ import cloudcode.helloworld.web.dto.DtoMapper;
 import cloudcode.helloworld.web.dto.PageDto;
 import cloudcode.helloworld.web.dto.UserDto;
 import com.lp.domain.model.Role;
-import com.lp.domain.model.SortDirectionEnum;
 import com.lp.domain.model.Status;
 import com.lp.domain.model.User;
 import com.lp.domain.service.UserService;
@@ -13,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
@@ -42,32 +42,26 @@ public class UserController {
     PageDto<UserDto> getUserListResponse(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "name") String sortBy,
-            @RequestParam(defaultValue = "ASC") SortDirectionEnum sortDirection) {
-        PageDto<UserDto> dto = new PageDto<>();
-        dto.setPageNum(page);
-        dto.setSortBy(sortBy);
-        dto.setSortDirection(sortDirection);
+            @RequestParam(defaultValue = "ASC") String sortDirection) {
 
-        userService.getAllUsers(
-                page-1,
-                10,
-                sortBy,
-                sortDirection.name()
-        ).forEach(user -> dto.getData().add(
-                this.dtoMapper.mapUserToDto(user)
-        ));
-
-        return dto;
+        return dtoMapper.mapPageToDto(
+                userService.getAllUsers(
+                        page,
+                        10,
+                        sortBy,
+                        sortDirection
+                )
+        );
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{uuid}")
     UserDto getUserResponse(
-            @PathVariable Long id
+            @PathVariable("uuid") UUID uuid
     ) {
-        Optional<User> optionalUser = userService.findById(id);
+        Optional<User> optionalUser = userService.findById(uuid);
 
         if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("User not found");
+            throw new IllegalArgumentException("User [" + uuid + "] not found");
         }
 
         return dtoMapper.mapUserToDto(
@@ -87,14 +81,14 @@ public class UserController {
         );
     }
 
-    @PutMapping("{id}")
+    @PutMapping("{uuid}")
     UserDto putUserResponse(
-            @PathVariable("id") Long id,
+            @PathVariable("uuid") UUID uuid,
             @RequestBody UserDto userDto
     ) {
-        Optional<User> optionalUser = userService.findById(id);
+        Optional<User> optionalUser = userService.findById(uuid);
         if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("User [" + id + "] not found");
+            throw new IllegalArgumentException("User [" + uuid + "] not found");
         }
 
         return dtoMapper.mapUserToDto(

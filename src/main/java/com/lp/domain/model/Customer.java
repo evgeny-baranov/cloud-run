@@ -1,14 +1,20 @@
 package com.lp.domain.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "customer", catalog = "testdb")
 @Getter
 @Setter
-public class Customer extends AbstractEntity {
-
+@NoArgsConstructor
+public class Customer extends AbstractUuidEntity {
     private String name;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "parent_id")
+    private Customer parent;
 }

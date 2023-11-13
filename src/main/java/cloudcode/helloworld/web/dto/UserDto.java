@@ -16,7 +16,7 @@ import java.util.HashSet;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class UserDto extends Dto {
+public class UserDto extends AbstractUuidDto {
     private String name;
     private String email;
     private Collection<RoleEnum> roles = new HashSet<>();
