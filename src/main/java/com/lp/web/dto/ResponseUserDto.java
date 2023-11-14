@@ -1,4 +1,4 @@
-package cloudcode.helloworld.web.dto;
+package com.lp.web.dto;
 
 import com.lp.domain.model.RoleEnum;
 import com.lp.domain.model.StatusEnum;
@@ -16,7 +16,7 @@ import java.util.HashSet;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class UserDto extends AbstractUuidDto {
+public class ResponseUserDto extends AbstractResponseDto {
     private String name;
     private String email;
     private Collection<RoleEnum> roles = new HashSet<>();

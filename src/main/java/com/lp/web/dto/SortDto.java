@@ -1,4 +1,4 @@
-package cloudcode.helloworld.web.dto;
+package com.lp.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

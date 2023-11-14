@@ -11,6 +11,7 @@ import lombok.Setter;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "role", catalog = "testdb")
@@ -30,7 +31,7 @@ public class Role extends AbstractEntity {
             fetch = FetchType.EAGER
     )
     @JsonIgnore
-    private Collection<UserRole> userRoles = new HashSet<>();
+    private Set<UserRole> roleUsers = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -39,7 +40,7 @@ public class Role extends AbstractEntity {
                     name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
                     name = "privilege_id", referencedColumnName = "id"))
-    private Collection<Privilege> privileges;
+    private Collection<Privilege> privileges = new HashSet<>();
 
     public Role(RoleEnum name) {
         this.name = name;

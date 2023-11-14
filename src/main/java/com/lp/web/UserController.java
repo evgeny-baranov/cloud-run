@@ -1,12 +1,14 @@
-package cloudcode.helloworld.web;
+package com.lp.web;
 
-import cloudcode.helloworld.web.dto.DtoMapper;
-import cloudcode.helloworld.web.dto.PageDto;
-import cloudcode.helloworld.web.dto.UserDto;
 import com.lp.domain.model.Role;
+import com.lp.domain.model.SortDirectionEnum;
 import com.lp.domain.model.Status;
 import com.lp.domain.model.User;
 import com.lp.domain.service.UserService;
+import com.lp.web.dto.DtoMapper;
+import com.lp.web.dto.PageDto;
+import com.lp.web.dto.RequestUserDto;
+import com.lp.web.dto.ResponseUserDto;
 import lombok.extern.java.Log;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -39,23 +41,24 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    PageDto<UserDto> getUserListResponse(
-            @RequestParam(defaultValue = "1") int page,
+    PageDto<ResponseUserDto> getUserListResponse(
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam(defaultValue = "name") String sortBy,
-            @RequestParam(defaultValue = "ASC") String sortDirection) {
+            @RequestParam(defaultValue = "ASC") SortDirectionEnum sortDirection) {
 
         return dtoMapper.mapPageToDto(
                 userService.getAllUsers(
-                        page,
-                        10,
+                        pageNumber,
+                        pageSize,
                         sortBy,
-                        sortDirection
+                        sortDirection.name()
                 )
         );
     }
 
     @GetMapping("/{uuid}")
-    UserDto getUserResponse(
+    ResponseUserDto getUserResponse(
             @PathVariable("uuid") UUID uuid
     ) {
         Optional<User> optionalUser = userService.findById(uuid);
@@ -70,7 +73,7 @@ public class UserController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    UserDto postUserResponse(@RequestBody UserDto userDto) {
+    ResponseUserDto postUserResponse(@RequestBody RequestUserDto userDto) {
         return dtoMapper.mapUserToDto(
                 userService.saveUser(
                         dtoMapper.mapDtoToUser(
@@ -82,11 +85,12 @@ public class UserController {
     }
 
     @PutMapping("{uuid}")
-    UserDto putUserResponse(
+    ResponseUserDto putUserResponse(
             @PathVariable("uuid") UUID uuid,
-            @RequestBody UserDto userDto
+            @RequestBody RequestUserDto userDto
     ) {
         Optional<User> optionalUser = userService.findById(uuid);
+
         if (optionalUser.isEmpty()) {
             throw new IllegalArgumentException("User [" + uuid + "] not found");
         }

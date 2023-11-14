@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", catalog = "testdb")
@@ -37,12 +37,11 @@ public class User extends AbstractUuidEntity {
     }
 
     @OneToMany(
-            mappedBy = "user",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            orphanRemoval = true
+            mappedBy = "user",
+            fetch = FetchType.EAGER
     )
-    private Collection<UserRole> roles = new HashSet<>();
+    private Set<UserRole> roles = new HashSet<>();
 
     public boolean haveRole(Role role) {
         for (UserRole userRole : roles) {
@@ -60,6 +59,17 @@ public class User extends AbstractUuidEntity {
 
     public void addRole(RoleEnum roleName) {
         addRole(new Role(roleName));
+    }
+
+    public void removeRole(RoleEnum roleName) {
+        removeRole(new Role(roleName));
+    }
+
+    public void removeRole(Role role) {
+        roles.stream()
+                .filter(userRole -> userRole.getRole().equals(role))
+                .toList()
+                .forEach(roles::remove);
     }
 
     public void addRole(Role role) {

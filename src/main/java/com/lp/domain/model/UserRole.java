@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -26,19 +25,15 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRole extends AbstractEntity {
-    @ManyToOne
+
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
-    @ManyToOne(
-            cascade = CascadeType.MERGE
-    )
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "role_id")
     private Role role;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date creationDate = new Date();
 
     @Override
     public int hashCode() {

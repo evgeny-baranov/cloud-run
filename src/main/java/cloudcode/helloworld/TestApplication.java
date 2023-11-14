@@ -1,6 +1,8 @@
 package cloudcode.helloworld;
 
 import com.lp.domain.service.UserService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,12 @@ import java.util.Collections;
 @EntityScan(basePackages = "com.lp.domain")
 @EnableJpaRepositories(basePackages = "com.lp.domain")
 @ComponentScan(basePackages = {
-        "cloudcode.helloworld.web",
+        "com.lp.web",
         "com.lp.domain",
         "com.lp.secrets"
+})
+@OpenAPIDefinition(servers = {
+        @Server(url = "/", description = "Default Server URL")
 })
 public class TestApplication {
 

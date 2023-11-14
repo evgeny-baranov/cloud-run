@@ -1,14 +1,14 @@
 package com.lp.domain.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.IOException;
+import java.util.Date;
 
 @MappedSuperclass
 @Getter
@@ -18,6 +18,14 @@ class AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updated;
 
     @Override
     public String toString() {

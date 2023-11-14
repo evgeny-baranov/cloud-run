@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public User saveUser(User user) {
+        // manage user status
         Status status = statusCache.get(
                 user.getStatus().getName()
         ).orElseGet(() -> {
@@ -55,31 +56,32 @@ public class UserServiceImpl implements UserService {
 
         user.setStatus(status);
 
-        Collection<UserRole> roles = new HashSet<>(user.getRoles());
-        user.setRoles(new HashSet<>());
+        // manage user roles
+        Collection<UserRole> copy = new HashSet<>(user.getRoles());
+        user.getRoles().clear();
 
-        roles.forEach(userRole -> {
-            roleCache.get(
-                    userRole.getRole().getName()
-            ).ifPresent(userRole::setRole);
-            user.getRoles().add(userRole);
-        });
+        copy.forEach(userRole -> roleCache.get(
+                userRole.getRole().getName()
+        ).ifPresent(userRole::setRole));
 
+        user.getRoles().addAll(copy);
+
+        // save changes to repository
         return userRepository.save(user);
     }
 
     public Page<User> getAllUsers(
-            int page,
-            int size,
+            int pageNumber,
+            int pageSize,
             String sortBy,
-            String direction
+            String sortDirection
     ) {
         return userRepository.findAll(
                 PageRequest.of(
-                        page - 1,
-                        size,
+                        pageNumber - 1,
+                        pageSize,
                         Sort.by(
-                                Sort.Direction.fromString(direction),
+                                Sort.Direction.fromString(sortDirection),
                                 sortBy
                         )
                 )
@@ -108,13 +110,9 @@ public class UserServiceImpl implements UserService {
 
     @PostConstruct
     public void init() {
-        try {
-            initRoles();
-            initStatuses();
-            initSystemUser();
-        } catch (Throwable error) {
-            log.info(error.getMessage());
-        }
+        initRoles();
+        initStatuses();
+        initSystemUser();
     }
 
     public void initSystemUser() {
@@ -124,7 +122,9 @@ public class UserServiceImpl implements UserService {
                 "info@baranov.eu"
         );
         user.setStatus(StatusEnum.STATUS_ACTIVE);
+
         Arrays.stream(RoleEnum.values()).forEach(user::addRole);
+
         saveUser(user);
     }
 
