@@ -1,18 +1,21 @@
 package com.lp.web;
 
+import com.google.zxing.WriterException;
 import com.lp.domain.model.Role;
 import com.lp.domain.model.SortDirectionEnum;
 import com.lp.domain.model.Status;
 import com.lp.domain.model.User;
+import com.lp.domain.service.QrCodeService;
 import com.lp.domain.service.UserService;
-import com.lp.web.dto.DtoMapper;
-import com.lp.web.dto.PageDto;
-import com.lp.web.dto.RequestUserDto;
-import com.lp.web.dto.ResponseUserDto;
+import com.lp.web.dto.*;
 import lombok.extern.java.Log;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,13 +24,24 @@ import java.util.UUID;
 @Log
 public class UserController {
 
-    final UserService userService;
+    private final UserService userService;
 
-    final DtoMapper dtoMapper;
+    private final UserDtoMapper dtoMapper;
 
-    public UserController(UserService userService, DtoMapper dtoMapper) {
+    private final QrCodeService qrCodeService;
+
+    private final QrCodeDtoMapper qrCodeDtoMapper;
+
+    public UserController(
+            UserService userService,
+            QrCodeService qrCodeService,
+            UserDtoMapper dtoMapper,
+            QrCodeDtoMapper qrCodeDtoMapper
+    ) {
         this.userService = userService;
         this.dtoMapper = dtoMapper;
+        this.qrCodeService = qrCodeService;
+        this.qrCodeDtoMapper = qrCodeDtoMapper;
     }
 
     @GetMapping("/roles")
@@ -103,5 +117,35 @@ public class UserController {
                         )
                 )
         );
+    }
+
+    @GetMapping("{uuid}/qrcode/")
+    public ResponseEntity<byte[]> getQrCode(
+            @PathVariable("uuid") UUID uuid,
+            @RequestParam(defaultValue = "250", required = false) int width,
+            @RequestParam(defaultValue = "250", required = false) int height,
+//            @RequestParam(defaultValue = "QR_CODE", required = false) BarcodeFormat barcodeFormat,
+            @RequestParam(defaultValue = "png", required = false) ImageFormat imageFormat
+    ) throws WriterException, IOException {
+        Optional<User> optionalUser = userService.findById(uuid);
+
+        if (optionalUser.isEmpty()) {
+            throw new IllegalArgumentException("User [" + uuid + "] not found");
+        }
+
+        String text = "uuid=" + optionalUser.get().getUuid() + "&"
+                + "name=" + URLEncoder.encode(
+                optionalUser.get().getName(),
+                StandardCharsets.UTF_8
+        );
+
+        return ResponseEntity.ok()
+                .contentType(qrCodeDtoMapper.mapFormatToMediaType(imageFormat))
+                .body(
+                        qrCodeDtoMapper.mapMatrixToByte(
+                                qrCodeService.generateQrCode(text, width, height),
+                                imageFormat
+                        )
+                );
     }
 }

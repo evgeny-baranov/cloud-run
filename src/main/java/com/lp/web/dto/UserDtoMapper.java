@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Component
-public class DtoMapper {
+public class UserDtoMapper {
     public User mapDtoToUser(User user, RequestUserDto dto) {
         user.setName(
                 dto.getName() == null
