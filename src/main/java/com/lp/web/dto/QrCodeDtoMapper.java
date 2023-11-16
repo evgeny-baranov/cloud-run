@@ -12,7 +12,7 @@ import java.io.IOException;
 @Component
 public class QrCodeDtoMapper {
 
-    public byte[] mapMatrixToByte(BitMatrix bitMatrix, ImageFormat format) throws IOException {
+    public byte[] mapMatrixToByte(BitMatrix bitMatrix, ImageFormatDto format) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         if ("svg".equalsIgnoreCase(format.name())) {
@@ -25,8 +25,8 @@ public class QrCodeDtoMapper {
         return outputStream.toByteArray();
     }
 
-    public MediaType mapFormatToMediaType(ImageFormat format) {
-        if (ImageFormat.svg == format) {
+    public MediaType mapFormatToMediaType(ImageFormatDto format) {
+        if (ImageFormatDto.svg == format) {
             return MediaType.valueOf("image/svg+xml");
         } else {
             return MediaType.valueOf("image/" + format);

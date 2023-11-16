@@ -14,11 +14,11 @@ public interface UserService {
 
     User saveUser(User user);
 
-    Page<User> getAllUsers(
-            int page,
-            int size,
+    Page<User> getPagedUsers(
+            int pageNumber,
+            int pageSize,
             String sortBy,
-            String direction
+            String sortDirection
     );
 
     Iterable<Role> getAllRoles();

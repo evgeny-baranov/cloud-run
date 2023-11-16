@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    public Page<User> getAllUsers(
+    public Page<User> getPagedUsers(
             int pageNumber,
             int pageSize,
             String sortBy,

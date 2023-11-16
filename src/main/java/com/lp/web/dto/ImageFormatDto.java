@@ -1,6 +1,6 @@
 package com.lp.web.dto;
 
-public enum ImageFormat {
+public enum ImageFormatDto {
     svg,
     png,
     jpeg,

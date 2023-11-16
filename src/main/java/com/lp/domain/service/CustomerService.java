@@ -1,14 +1,24 @@
 package com.lp.domain.service;
 
 import com.lp.domain.model.Customer;
+import org.springframework.data.domain.Page;
+
+import java.util.Optional;
+import java.util.UUID;
 
 public interface CustomerService {
-    Iterable<Customer> getAllCustomers(
-            int page,
-            int size,
+    public Iterable<Customer> getAllCustomers();
+
+    Page<Customer> getPagedCustomers(
+            int pageNumber,
+            int pageSize,
             String sortBy,
-            String direction
+            String sortDirection
     );
 
+    Optional<Customer> findByUuid(UUID uuid);
+
     Customer saveCustomer(Customer customer);
+
+    Customer getOwner();
 }

@@ -26,7 +26,7 @@ public class UserController {
 
     private final UserService userService;
 
-    private final UserDtoMapper dtoMapper;
+    private final UserDtoMapper userDtoMapper;
 
     private final QrCodeService qrCodeService;
 
@@ -39,7 +39,7 @@ public class UserController {
             QrCodeDtoMapper qrCodeDtoMapper
     ) {
         this.userService = userService;
-        this.dtoMapper = dtoMapper;
+        this.userDtoMapper = dtoMapper;
         this.qrCodeService = qrCodeService;
         this.qrCodeDtoMapper = qrCodeDtoMapper;
     }
@@ -61,8 +61,8 @@ public class UserController {
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestParam(defaultValue = "ASC") SortDirectionEnum sortDirection) {
 
-        return dtoMapper.mapPageToDto(
-                userService.getAllUsers(
+        return userDtoMapper.mapPageToDto(
+                userService.getPagedUsers(
                         pageNumber,
                         pageSize,
                         sortBy,
@@ -81,16 +81,16 @@ public class UserController {
             throw new IllegalArgumentException("User [" + uuid + "] not found");
         }
 
-        return dtoMapper.mapUserToDto(
+        return userDtoMapper.mapUserToDto(
                 optionalUser.get()
         );
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseUserDto postUserResponse(@RequestBody RequestUserDto userDto) {
-        return dtoMapper.mapUserToDto(
+        return userDtoMapper.mapUserToDto(
                 userService.saveUser(
-                        dtoMapper.mapDtoToUser(
+                        userDtoMapper.mapDtoToUser(
                                 new User(),
                                 userDto
                         )
@@ -109,9 +109,9 @@ public class UserController {
             throw new IllegalArgumentException("User [" + uuid + "] not found");
         }
 
-        return dtoMapper.mapUserToDto(
+        return userDtoMapper.mapUserToDto(
                 userService.saveUser(
-                        dtoMapper.mapDtoToUser(
+                        userDtoMapper.mapDtoToUser(
                                 optionalUser.get(),
                                 userDto
                         )
@@ -125,7 +125,7 @@ public class UserController {
             @RequestParam(defaultValue = "250", required = false) int width,
             @RequestParam(defaultValue = "250", required = false) int height,
 //            @RequestParam(defaultValue = "QR_CODE", required = false) BarcodeFormat barcodeFormat,
-            @RequestParam(defaultValue = "png", required = false) ImageFormat imageFormat
+            @RequestParam(defaultValue = "png", required = false) ImageFormatDto imageFormat
     ) throws WriterException, IOException {
         Optional<User> optionalUser = userService.findById(uuid);
 
