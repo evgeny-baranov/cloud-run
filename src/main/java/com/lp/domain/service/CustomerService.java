@@ -21,4 +21,12 @@ public interface CustomerService {
     Customer saveCustomer(Customer customer);
 
     Customer getOwner();
+
+    Page<Customer> getPagedCustomerReferrals(
+            Customer customer,
+            int pageNumber,
+            int pageSize,
+            String sortBy,
+            String sortDirection
+    );
 }

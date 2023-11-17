@@ -20,9 +20,9 @@ public class Affiliate extends AbstractEntity {
     Customer affiliate;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "refferal_id")
+    @JoinColumn(name = "referral_id")
     @JsonIgnore
-    Customer refferal;
+    Customer referral;
 
     @ManyToOne(
             cascade = CascadeType.MERGE,

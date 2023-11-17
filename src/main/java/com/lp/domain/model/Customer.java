@@ -1,5 +1,6 @@
 package com.lp.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,9 +21,10 @@ public class Customer extends AbstractUuidEntity {
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            mappedBy = "refferal",
+            mappedBy = "referral",
             fetch = FetchType.EAGER
     )
+    @JsonIgnore
     private Set<Affiliate> affiliate = new HashSet<>();
 
     public void setAffiliate(Customer affiliate) {

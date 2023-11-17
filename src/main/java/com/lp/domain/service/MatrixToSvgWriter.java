@@ -1,9 +1,10 @@
 package com.lp.domain.service;
 
 import com.google.zxing.common.BitMatrix;
+
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.IOException;
 import java.io.Writer;
 
 public class MatrixToSvgWriter {

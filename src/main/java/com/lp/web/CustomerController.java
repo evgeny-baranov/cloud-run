@@ -47,17 +47,42 @@ public class CustomerController {
     }
 
     @GetMapping("/{uuid}")
-    ResponseCustomerDto getUserResponse(
+    ResponseCustomerDto getCustomerResponse(
             @PathVariable("uuid") UUID uuid
     ) {
-        Optional<Customer> optionalUser = customerService.findByUuid(uuid);
+        Optional<Customer> optionalCustomer = customerService.findByUuid(uuid);
 
-        if (optionalUser.isEmpty()) {
+        if (optionalCustomer.isEmpty()) {
             throw new IllegalArgumentException("Customer [" + uuid + "] not found");
         }
 
         return customerDtoMapper.mapCustomerToDto(
-                optionalUser.get()
+                optionalCustomer.get()
+        );
+    }
+
+    @GetMapping("/{uuid}/referral/list")
+    PageDto<ResponseCustomerDto> getCustomerReferralsResponse(
+            @PathVariable("uuid") UUID uuid,
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "referral.name") String sortBy,
+            @RequestParam(defaultValue = "ASC") SortDirectionEnum sortDirection
+    ) {
+        Optional<Customer> optionalCustomer = customerService.findByUuid(uuid);
+
+        if (optionalCustomer.isEmpty()) {
+            throw new IllegalArgumentException("Customer [" + uuid + "] not found");
+        }
+
+        return customerDtoMapper.mapPageToDto(
+                customerService.getPagedCustomerReferrals(
+                        optionalCustomer.get(),
+                        pageNumber,
+                        pageSize,
+                        sortBy,
+                        sortDirection.name()
+                )
         );
     }
 }

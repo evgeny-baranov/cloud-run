@@ -1,6 +1,7 @@
 package com.lp.domain.service;
 
 import com.lp.domain.model.Customer;
+import com.lp.domain.repository.AffiliateRepository;
 import com.lp.domain.repository.CustomerRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
@@ -16,11 +17,17 @@ import java.util.UUID;
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
 
+    private final AffiliateRepository affiliateRepository;
+
     @Getter
     private Customer owner;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
+    public CustomerServiceImpl(
+            CustomerRepository customerRepository,
+            AffiliateRepository affiliateRepository
+    ) {
         this.customerRepository = customerRepository;
+        this.affiliateRepository = affiliateRepository;
     }
 
     public Iterable<Customer> getAllCustomers() {
@@ -53,6 +60,25 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findByUuid(uuid);
     }
 
+    public Page<Customer> getPagedCustomerReferrals(
+            Customer customer,
+            int pageNumber,
+            int pageSize,
+            String sortBy,
+            String sortDirection
+    ) {
+        return affiliateRepository.findDistinctReferralByAffiliate(
+                customer,
+                PageRequest.of(
+                        pageNumber - 1,
+                        pageSize,
+                        Sort.by(
+                                Sort.Direction.fromString(sortDirection),
+                                sortBy
+                        )
+                )
+        );
+    }
 
     @PostConstruct
     public void init() {
