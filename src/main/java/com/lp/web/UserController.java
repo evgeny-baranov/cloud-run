@@ -1,13 +1,12 @@
 package com.lp.web;
 
 import com.google.zxing.WriterException;
-import com.lp.domain.model.Role;
-import com.lp.domain.model.SortDirectionEnum;
-import com.lp.domain.model.Status;
-import com.lp.domain.model.User;
+import com.lp.domain.model.*;
 import com.lp.domain.service.QrCodeService;
 import com.lp.domain.service.UserService;
 import com.lp.web.dto.*;
+import com.lp.web.dto.mappers.UserDtoMapper;
+import jakarta.validation.Valid;
 import lombok.extern.java.Log;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +53,11 @@ public class UserController {
         return userService.getAllStatuses();
     }
 
+    @GetMapping("/providers")
+    Iterable<SocialProviderEnum> getUserLoginProvidersResponse() {
+        return userService.getAllProviders();
+    }
+
     @GetMapping("/list")
     PageDto<ResponseUserDto> getUserListResponse(
             @RequestParam(defaultValue = "1") int pageNumber,
@@ -87,10 +91,12 @@ public class UserController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseUserDto postUserResponse(@RequestBody RequestUserDto userDto) {
+    ResponseUserDto postUserResponse(
+            @Valid @RequestBody RequestCreateUserDto userDto
+    ) {
         return userDtoMapper.mapUserToDto(
                 userService.saveUser(
-                        userDtoMapper.mapDtoToUser(
+                        userDtoMapper.mapCreateDtoToUser(
                                 new User(),
                                 userDto
                         )
@@ -101,7 +107,7 @@ public class UserController {
     @PutMapping("{uuid}")
     ResponseUserDto putUserResponse(
             @PathVariable("uuid") UUID uuid,
-            @RequestBody RequestUserDto userDto
+            @Valid @RequestBody RequestUpdateUserDto userDto
     ) {
         Optional<User> optionalUser = userService.findById(uuid);
 
@@ -111,7 +117,7 @@ public class UserController {
 
         return userDtoMapper.mapUserToDto(
                 userService.saveUser(
-                        userDtoMapper.mapDtoToUser(
+                        userDtoMapper.mapUpdateDtoToUser(
                                 optionalUser.get(),
                                 userDto
                         )

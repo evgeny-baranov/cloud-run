@@ -1,6 +1,10 @@
-package com.lp.web.dto;
+package com.lp.web.dto.mappers;
 
 import com.lp.domain.model.*;
+import com.lp.web.dto.PageDto;
+import com.lp.web.dto.RequestCreateUserDto;
+import com.lp.web.dto.RequestUpdateUserDto;
+import com.lp.web.dto.ResponseUserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +13,19 @@ import java.util.HashSet;
 
 @Component
 public class UserDtoMapper extends AbstractDtoMapper {
-    public User mapDtoToUser(User user, RequestUserDto dto) {
+    public User mapCreateDtoToUser(User user, RequestCreateUserDto dto) {
+        user.setName(user.getName());
+        user.setEmail(user.getEmail());
+
+        user.setStatus(new Status(dto.getStatus()));
+
+        user.getRoles().removeIf(userRole -> !dto.getRoles().contains(userRole.getRole().getName()));
+        dto.getRoles().forEach(user::addRole);
+
+        return user;
+    }
+
+    public User mapUpdateDtoToUser(User user, RequestUpdateUserDto dto) {
         user.setName(
                 dto.getName() == null
                         ? user.getName()
@@ -56,6 +72,7 @@ public class UserDtoMapper extends AbstractDtoMapper {
                 .status(mapUserStatusToDto(user.getStatus()))
                 .build();
     }
+
 
     public PageDto<ResponseUserDto> mapPageToDto(Page<User> page) {
         PageDto<ResponseUserDto> dto = new PageDto<>();

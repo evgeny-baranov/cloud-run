@@ -3,7 +3,7 @@ package com.lp.web;
 import com.lp.domain.model.Customer;
 import com.lp.domain.model.SortDirectionEnum;
 import com.lp.domain.service.CustomerService;
-import com.lp.web.dto.CustomerDtoMapper;
+import com.lp.web.dto.mappers.CustomerDtoMapper;
 import com.lp.web.dto.PageDto;
 import com.lp.web.dto.ResponseCustomerDto;
 import lombok.extern.java.Log;

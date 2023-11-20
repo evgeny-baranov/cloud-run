@@ -1,13 +1,11 @@
 package com.lp.web.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Getter
-@Setter
+@Data
 public class PageDto<T> {
     private int number;
     private int totalPages;

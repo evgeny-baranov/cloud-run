@@ -1,6 +1,7 @@
 package com.lp.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +18,11 @@ import java.util.Set;
 @NoArgsConstructor
 public class User extends AbstractUuidEntity {
 
+    @NotBlank
     private String name;
 
     @Column(unique = true)
+    @NotBlank
     private String email;
 
     @ManyToOne(

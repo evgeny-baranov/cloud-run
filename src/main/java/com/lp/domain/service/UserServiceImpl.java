@@ -96,6 +96,11 @@ public class UserServiceImpl implements UserService {
         return statusCache.getAll();
     }
 
+    @Override
+    public Iterable<SocialProviderEnum> getAllProviders() {
+        return Arrays.stream(SocialProviderEnum.values()).toList();
+    }
+
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }

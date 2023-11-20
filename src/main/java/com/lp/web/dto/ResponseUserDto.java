@@ -2,19 +2,13 @@ package com.lp.web.dto;
 
 import com.lp.domain.model.RoleEnum;
 import com.lp.domain.model.StatusEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Collection;
 import java.util.HashSet;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @SuperBuilder
 public class ResponseUserDto extends AbstractResponseDto {
     private String name;

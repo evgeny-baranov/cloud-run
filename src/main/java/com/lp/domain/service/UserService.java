@@ -1,6 +1,7 @@
 package com.lp.domain.service;
 
 import com.lp.domain.model.Role;
+import com.lp.domain.model.SocialProviderEnum;
 import com.lp.domain.model.Status;
 import com.lp.domain.model.User;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,8 @@ public interface UserService {
     Iterable<Role> getAllRoles();
 
     Iterable<Status> getAllStatuses();
+
+    Iterable<SocialProviderEnum> getAllProviders();
 
     Optional<User> findByEmail(String email);
 
