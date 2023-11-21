@@ -1,11 +1,9 @@
-runtime: java
-env: flex
+runtime: java17
+env: standard
+service_account: lp-test@lp-test2.iam.gserviceaccount.com
 runtime_config:
   operating_system: ubuntu22
   runtime_version: 17
 handlers:
   - url: /.*
     script: this field is required, but ignored
-
-manual_scaling:
-  instances: 1

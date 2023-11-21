@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CustomerService {
-    public Iterable<Customer> getAllCustomers();
+    Iterable<Customer> getAllCustomers();
 
     Page<Customer> getPagedCustomers(
             int pageNumber,

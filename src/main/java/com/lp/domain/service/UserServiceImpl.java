@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public User saveUser(User user) {
+        log.info(user.toString());
         // manage user status
         Status status = statusCache.get(
                 user.getStatus().getName()

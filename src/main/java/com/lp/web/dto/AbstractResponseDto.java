@@ -8,5 +8,5 @@ import java.util.UUID;
 @Data
 @SuperBuilder
 public class AbstractResponseDto {
-    private UUID uuid;
+    protected UUID uuid;
 }

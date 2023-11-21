@@ -10,12 +10,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class UserDtoMapper extends AbstractDtoMapper {
     public User mapCreateDtoToUser(User user, RequestCreateUserDto dto) {
-        user.setName(user.getName());
-        user.setEmail(user.getEmail());
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
 
         user.setStatus(new Status(dto.getStatus()));
 
@@ -51,8 +52,8 @@ public class UserDtoMapper extends AbstractDtoMapper {
         return user;
     }
 
-    private Collection<RoleEnum> mapRoleSetToDto(Collection<UserRole> roles) {
-        Collection<RoleEnum> set = new HashSet<>();
+    private Set<RoleEnum> mapRoleSetToDto(Collection<UserRole> roles) {
+        Set<RoleEnum> set = new HashSet<>();
 
         roles.forEach(userRole -> set.add(userRole.getRole().getName()));
 

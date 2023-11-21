@@ -19,7 +19,6 @@ FROM openjdk:17
 
 # Copy the jar to the production image from the builder stage.
 COPY --from=build-env /app/target/app-test-*.jar /app-test.jar
-COPY ./.configs/application_default_credentials.json /app/application_default_credentials.json
 ENV GOOGLE_APPLICATION_CREDENTIALS=/app/application_default_credentials.json
 # Run the web service on container startup.
-CMD ["java", "-jar", "/app-test.jar"]
+ENTRYPOINT ["java", "-jar", "/app-test.jar"]
