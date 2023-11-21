@@ -3,10 +3,14 @@ package com.lp.web;
 import com.lp.domain.model.Customer;
 import com.lp.domain.model.SortDirectionEnum;
 import com.lp.domain.service.CustomerService;
+import com.lp.web.dto.RequestCreateCustomerDto;
+import com.lp.web.dto.RequestUpdateCustomerDto;
 import com.lp.web.dto.mappers.CustomerDtoMapper;
 import com.lp.web.dto.PageDto;
 import com.lp.web.dto.ResponseCustomerDto;
+import jakarta.validation.Valid;
 import lombok.extern.java.Log;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -46,7 +50,49 @@ public class CustomerController {
         );
     }
 
-    @GetMapping("/{uuid}")
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseCustomerDto getCustomerResponse(
+            @Valid @RequestBody RequestCreateCustomerDto dto
+    ) {
+        return customerDtoMapper.mapCustomerToDto(
+                customerService.saveCustomer(
+                        customerDtoMapper.mapCreateDtoToCustomer(
+                                new Customer(),
+                                dto,
+                                dto.getAffiliate() == null
+                                        ? customerService.getOwner()
+                                        : customerService.findByUuid(UUID.fromString(dto.getAffiliate()))
+                                        .orElseGet(customerService::getOwner)
+                        )
+                )
+        );
+    }
+
+    @PutMapping(
+            path = "{uuid}",
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    ResponseCustomerDto putCustomerResponse(
+            @PathVariable("uuid") UUID uuid,
+            @Valid @RequestBody RequestUpdateCustomerDto dto
+    ) {
+        Optional<Customer> optionalCustomer = customerService.findByUuid(uuid);
+
+        if (optionalCustomer.isEmpty()) {
+            throw new IllegalArgumentException("Customer [" + uuid + "] not found");
+        }
+
+        return customerDtoMapper.mapCustomerToDto(
+                customerService.saveCustomer(
+                        customerDtoMapper.mapUpdateDtoToCustomer(
+                                optionalCustomer.get(),
+                                dto
+                        )
+                )
+        );
+    }
+
+    @GetMapping("{uuid}")
     ResponseCustomerDto getCustomerResponse(
             @PathVariable("uuid") UUID uuid
     ) {

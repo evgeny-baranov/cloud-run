@@ -53,6 +53,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public Customer saveCustomer(Customer customer) {
+        if (customer.getAffiliate() == null && this.getOwner() != null) {
+            customer.setAffiliate(this.getOwner());
+        }
         return customerRepository.save(customer);
     }
 
