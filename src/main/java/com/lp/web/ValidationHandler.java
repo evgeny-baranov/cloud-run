@@ -1,6 +1,7 @@
 package com.lp.web;
 
 import lombok.extern.java.Log;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -19,14 +20,18 @@ import java.util.Map;
 public class ValidationHandler extends ResponseEntityExceptionHandler {
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            @NotNull HttpHeaders headers,
+            @NotNull HttpStatusCode status,
+            @NotNull WebRequest request
+    ) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
 
             String fieldName = ((FieldError) error).getField();
             String message = error.getDefaultMessage();
             errors.put(fieldName, message);
-            log.info("[" + fieldName + "]: " + message);
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }

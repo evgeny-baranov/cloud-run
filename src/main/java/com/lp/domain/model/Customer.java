@@ -1,22 +1,20 @@
 package com.lp.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@EqualsAndHashCode(
+        callSuper = true,
+        exclude = {"affiliate"}
+)
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
+@Table(name = "customer", catalog = "testdb")
 public class Customer extends AbstractUuidEntity {
 
     @NotBlank
@@ -28,6 +26,7 @@ public class Customer extends AbstractUuidEntity {
             fetch = FetchType.EAGER
     )
     @JsonIgnore
+    @ToString.Exclude
     private Set<Affiliate> affiliate = new HashSet<>();
 
     public void setAffiliate(Customer affiliate) {

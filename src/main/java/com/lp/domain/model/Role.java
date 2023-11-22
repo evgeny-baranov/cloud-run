@@ -4,9 +4,9 @@ package com.lp.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,10 +15,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "role", catalog = "testdb")
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Role extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     @Column(unique = true)
@@ -31,6 +30,7 @@ public class Role extends AbstractEntity {
             fetch = FetchType.EAGER
     )
     @JsonIgnore
+    @ToString.Exclude
     private Set<UserRole> roleUsers = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)

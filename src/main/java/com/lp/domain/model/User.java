@@ -1,19 +1,21 @@
 package com.lp.domain.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@EqualsAndHashCode(
+        callSuper = true,
+        exclude = {"status", "roles"}
+)
 @Entity
 @Table(name = "users", catalog = "testdb")
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
 public class User extends AbstractUuidEntity {
 
@@ -27,6 +29,7 @@ public class User extends AbstractUuidEntity {
             cascade = CascadeType.MERGE,
             fetch = FetchType.EAGER
     )
+    @ToString.Exclude
     private Status status;
 
     public void setStatus(Status status) {
@@ -42,6 +45,7 @@ public class User extends AbstractUuidEntity {
             mappedBy = "user",
             fetch = FetchType.EAGER
     )
+    @ToString.Exclude
     private Set<UserRole> roles = new HashSet<>();
 
     public boolean haveRole(Role role) {

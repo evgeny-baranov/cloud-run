@@ -3,14 +3,14 @@ package com.lp.domain.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 @MappedSuperclass
-@Getter
-@Setter
+@Data
 class AbstractUuidEntity extends AbstractEntity {
 
     @Column(

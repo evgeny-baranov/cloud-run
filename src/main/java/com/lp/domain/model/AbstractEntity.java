@@ -1,18 +1,14 @@
 package com.lp.domain.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.io.IOException;
 import java.util.Date;
 
 @MappedSuperclass
-@Getter
-@Setter
+@Data
 class AbstractEntity {
 
     @Id
@@ -26,14 +22,4 @@ class AbstractEntity {
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date updated;
-
-    @Override
-    public String toString() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(this);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

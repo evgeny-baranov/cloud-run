@@ -2,13 +2,10 @@ package com.lp.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.util.Objects;
-
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(
         name = "user_role",
@@ -20,10 +17,7 @@ import java.util.Objects;
                 })
         }
 )
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class UserRole extends AbstractEntity {
 
     @ManyToOne(cascade = CascadeType.MERGE)
@@ -34,18 +28,4 @@ public class UserRole extends AbstractEntity {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "role_id")
     private Role role;
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(user, role);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserRole userRole = (UserRole) o;
-        return Objects.equals(user, userRole.user) &&
-                Objects.equals(role, userRole.role);
-    }
 }

@@ -1,11 +1,9 @@
 package cloudcode.helloworld;
 
-import com.lp.domain.service.UserService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -32,9 +30,6 @@ import java.util.Collections;
 public class TestApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(TestApplication.class);
-
-    @Autowired
-    UserService userService;
 
     public static void main(final String[] args) {
         String port = System.getenv("PORT");
