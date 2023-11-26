@@ -1,9 +1,7 @@
 package com.lp.domain.service;
 
-import com.lp.domain.model.Role;
-import com.lp.domain.model.RoleEnum;
-import com.lp.domain.model.Status;
-import com.lp.domain.model.StatusEnum;
+import com.lp.domain.model.*;
+import com.lp.domain.repository.ActionTypeRepository;
 import com.lp.domain.repository.RoleRepository;
 import com.lp.domain.repository.StatusRepository;
 import org.springframework.context.annotation.Bean;
@@ -19,5 +17,10 @@ public class CacheConfig {
     @Bean
     public GenericCache<Role, RoleEnum, RoleRepository> roleCache(RoleRepository repository) {
         return new GenericCache<>(repository, Role::getName);
+    }
+
+    @Bean
+    public GenericCache<ActionType, ActionTypeEnum, ActionTypeRepository> actionTypeCache(ActionTypeRepository repository) {
+        return new GenericCache<>(repository, ActionType::getName);
     }
 }

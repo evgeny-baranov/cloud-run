@@ -1,10 +1,7 @@
 package com.lp.domain.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +12,8 @@ import java.util.Set;
 )
 @Entity
 @Table(name = "users", catalog = "testdb")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class User extends AbstractUuidEntity {
 

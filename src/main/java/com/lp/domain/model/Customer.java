@@ -13,7 +13,8 @@ import java.util.Set;
         exclude = {"affiliate"}
 )
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "customer", catalog = "testdb")
 public class Customer extends AbstractUuidEntity {
 

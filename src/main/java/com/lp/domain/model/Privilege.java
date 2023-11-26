@@ -10,8 +10,10 @@ import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "privilege", catalog = "testdb")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Privilege extends AbstractEntity {
     private String name;
 

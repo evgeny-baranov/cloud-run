@@ -2,8 +2,9 @@ package com.lp.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -17,7 +18,8 @@ import lombok.EqualsAndHashCode;
                 })
         }
 )
-@Data
+@Getter
+@Setter
 public class UserRole extends AbstractEntity {
 
     @ManyToOne(cascade = CascadeType.MERGE)
