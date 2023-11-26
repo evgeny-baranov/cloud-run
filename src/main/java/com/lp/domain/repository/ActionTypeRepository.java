@@ -1,6 +1,7 @@
 package com.lp.domain.repository;
 
-import com.lp.domain.model.*;
+import com.lp.domain.model.ActionType;
+import com.lp.domain.model.ActionTypeEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

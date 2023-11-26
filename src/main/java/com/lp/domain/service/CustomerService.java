@@ -1,5 +1,6 @@
 package com.lp.domain.service;
 
+import com.lp.domain.model.Campaign;
 import com.lp.domain.model.Customer;
 import org.springframework.data.domain.Page;
 
@@ -23,6 +24,14 @@ public interface CustomerService {
     Customer getOwner();
 
     Page<Customer> getPagedCustomerReferrals(
+            Customer customer,
+            int pageNumber,
+            int pageSize,
+            String sortBy,
+            String sortDirection
+    );
+
+    Page<Campaign> getPagedCustomerCampaigns(
             Customer customer,
             int pageNumber,
             int pageSize,

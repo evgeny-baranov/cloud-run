@@ -3,13 +3,15 @@ package com.lp.domain.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "campaign", catalog = "testdb")
-@Data
+@Table(name = "action_summary", catalog = "testdb")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ActionSummary extends AbstractEntity {
     @ManyToOne(optional = true)
     private User user;

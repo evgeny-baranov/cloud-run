@@ -1,8 +1,6 @@
 package com.lp.web.dto.mappers;
 
-import com.lp.domain.model.Customer;
 import com.lp.web.dto.PageDto;
-import com.lp.web.dto.ResponseCustomerDto;
 import com.lp.web.dto.SortDto;
 import com.lp.web.dto.SortOrderDto;
 import org.springframework.data.domain.Page;
@@ -21,7 +19,7 @@ public class AbstractDtoMapper {
         return dto;
     }
 
-    protected void mapPageData(Page<Customer> page, PageDto<ResponseCustomerDto> dto) {
+    protected <T, U> void mapPageData(Page<T> page, PageDto<U> dto) {
         dto.setTotalPages(page.getTotalPages());
         dto.setNumber(page.getNumber() + 1);
         dto.setTotalElements(page.getTotalElements());

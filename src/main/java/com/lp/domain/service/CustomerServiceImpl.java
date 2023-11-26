@@ -1,7 +1,9 @@
 package com.lp.domain.service;
 
+import com.lp.domain.model.Campaign;
 import com.lp.domain.model.Customer;
 import com.lp.domain.repository.AffiliateRepository;
+import com.lp.domain.repository.CampaignRepository;
 import com.lp.domain.repository.CustomerRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
@@ -19,15 +21,19 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final AffiliateRepository affiliateRepository;
 
+    private final CampaignRepository campaignRepository;
+
     @Getter
     private Customer owner;
 
     public CustomerServiceImpl(
             CustomerRepository customerRepository,
-            AffiliateRepository affiliateRepository
+            AffiliateRepository affiliateRepository,
+            CampaignRepository campaignRepository
     ) {
         this.customerRepository = customerRepository;
         this.affiliateRepository = affiliateRepository;
+        this.campaignRepository = campaignRepository;
     }
 
     public Iterable<Customer> getAllCustomers() {
@@ -83,9 +89,27 @@ public class CustomerServiceImpl implements CustomerService {
         );
     }
 
+    public Page<Campaign> getPagedCustomerCampaigns(
+            Customer customer,
+            int pageNumber,
+            int pageSize,
+            String sortBy,
+            String sortDirection
+    ) {
+        return campaignRepository.findByCustomer(customer,
+                PageRequest.of(
+                        pageNumber - 1,
+                        pageSize,
+                        Sort.by(
+                                Sort.Direction.fromString(sortDirection),
+                                sortBy
+                        )
+                ));
+    }
+
     @PostConstruct
     public void init() {
-        // TODO: store in secrets, create only if doesnt exist
+        // TODO: store in secrets, create only if doesn't exist
         Customer customer = new Customer();
         customer.setName("LP");
         this.owner = saveCustomer(customer);

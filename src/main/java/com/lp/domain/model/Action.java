@@ -5,15 +5,16 @@ import com.lp.domain.model.converter.SettingsConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashMap;
+import java.util.Objects;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "action", catalog = "testdb")
 @Getter
 @Setter
 @RequiredArgsConstructor
 public class Action extends AbstractUuidEntity {
+
+    String name;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "campaign_id")
@@ -35,5 +36,10 @@ public class Action extends AbstractUuidEntity {
 
     public void setType(ActionType type) {
         this.type = type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), campaign, type);
     }
 }

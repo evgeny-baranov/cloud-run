@@ -1,13 +1,12 @@
 package com.lp.web;
 
+import com.lp.domain.model.Campaign;
 import com.lp.domain.model.Customer;
 import com.lp.domain.model.SortDirectionEnum;
+import com.lp.domain.service.CampaignService;
 import com.lp.domain.service.CustomerService;
-import com.lp.web.dto.RequestCreateCustomerDto;
-import com.lp.web.dto.RequestUpdateCustomerDto;
+import com.lp.web.dto.*;
 import com.lp.web.dto.mappers.CustomerDtoMapper;
-import com.lp.web.dto.PageDto;
-import com.lp.web.dto.ResponseCustomerDto;
 import jakarta.validation.Valid;
 import lombok.extern.java.Log;
 import org.springframework.http.MediaType;
@@ -25,12 +24,16 @@ public class CustomerController {
 
     private final CustomerDtoMapper customerDtoMapper;
 
+    private final CampaignService campaignService;
+
     public CustomerController(
             CustomerService customerService,
-            CustomerDtoMapper customerDtoMapper
+            CustomerDtoMapper customerDtoMapper,
+            CampaignService campaignService
     ) {
         this.customerService = customerService;
         this.customerDtoMapper = customerDtoMapper;
+        this.campaignService = campaignService;
     }
 
     @GetMapping("/list")
@@ -40,7 +43,7 @@ public class CustomerController {
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestParam(defaultValue = "ASC") SortDirectionEnum sortDirection) {
 
-        return customerDtoMapper.mapPageToDto(
+        return customerDtoMapper.mapCustomerPageToDto(
                 customerService.getPagedCustomers(
                         pageNumber,
                         pageSize,
@@ -107,7 +110,7 @@ public class CustomerController {
         );
     }
 
-    @GetMapping("/{uuid}/referral/list")
+    @GetMapping("/{uuid}/referral")
     PageDto<ResponseCustomerDto> getCustomerReferralsResponse(
             @PathVariable("uuid") UUID uuid,
             @RequestParam(defaultValue = "1") int pageNumber,
@@ -121,13 +124,86 @@ public class CustomerController {
             throw new IllegalArgumentException("Customer [" + uuid + "] not found");
         }
 
-        return customerDtoMapper.mapPageToDto(
+        return customerDtoMapper.mapCustomerPageToDto(
                 customerService.getPagedCustomerReferrals(
                         optionalCustomer.get(),
                         pageNumber,
                         pageSize,
                         sortBy,
                         sortDirection.name()
+                )
+        );
+    }
+
+    @GetMapping("/{uuid}/campaign")
+    PageDto<ResponseCampaignDto> getCustomerCampaignResponse(
+            @PathVariable("uuid") UUID uuid,
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "campaign.name") String sortBy,
+            @RequestParam(defaultValue = "ASC") SortDirectionEnum sortDirection
+    ) {
+        Optional<Customer> optionalCustomer = customerService.findByUuid(uuid);
+
+        if (optionalCustomer.isEmpty()) {
+            throw new IllegalArgumentException("Customer [" + uuid + "] not found");
+        }
+
+        return customerDtoMapper.mapCampaignPageToDto(
+                customerService.getPagedCustomerCampaigns(
+                        optionalCustomer.get(),
+                        pageNumber,
+                        pageSize,
+                        sortBy,
+                        sortDirection.name()
+                )
+        );
+    }
+
+    @PostMapping("/{uuid}/campaign")
+    ResponseCampaignDto postCustomerCampaignResponse(
+            @PathVariable("uuid") UUID uuid,
+            @Valid @RequestBody RequestCreateCampaignDto dto
+    ) {
+        Optional<Customer> optionalCustomer = customerService.findByUuid(uuid);
+
+        if (optionalCustomer.isEmpty()) {
+            throw new IllegalArgumentException("Customer [" + uuid + "] not found");
+        }
+
+        return customerDtoMapper.mapCampaignToDto(
+                campaignService.saveCampaign(
+                        customerDtoMapper.mapCreateDtoToCampaign(
+                                new Campaign(),
+                                dto
+                        )
+                )
+        );
+    }
+
+    @PutMapping("/{uuid}/campaign/{campaignUuid}")
+    ResponseCampaignDto postCustomerCampaignResponse(
+            @PathVariable("uuid") UUID uuid,
+            @PathVariable("campaignUuid") UUID campaignUuid,
+            @Valid @RequestBody RequestUpdateCampaignDto dto
+    ) {
+        Optional<Customer> optionalCustomer = customerService.findByUuid(uuid);
+        Optional<Campaign> optionalCampaign = campaignService.findByUuid(campaignUuid);
+
+        if (optionalCustomer.isEmpty()) {
+            throw new IllegalArgumentException("Customer [" + uuid + "] not found");
+        }
+
+        if (optionalCampaign.isEmpty()) {
+            throw new IllegalArgumentException("Campaign [" + campaignUuid + "] not found");
+        }
+
+        return customerDtoMapper.mapCampaignToDto(
+                campaignService.saveCampaign(
+                        customerDtoMapper.mapUpdateDtoToCampaign(
+                                optionalCampaign.get(),
+                                dto
+                        )
                 )
         );
     }
