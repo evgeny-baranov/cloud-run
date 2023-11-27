@@ -34,6 +34,10 @@ public class Campaign extends AbstractUuidEntity {
         this.customer = customer;
     }
 
+    public Campaign(Customer customer) {
+        this.customer = customer;
+    }
+
     public void addAction(Action action) {
         action.setCampaign(this);
         this.actions.add(action);

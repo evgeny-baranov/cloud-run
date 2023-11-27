@@ -7,7 +7,6 @@ import com.lp.domain.service.UserService;
 import com.lp.web.dto.*;
 import com.lp.web.dto.mappers.UserDtoMapper;
 import jakarta.validation.Valid;
-import lombok.extern.java.Log;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
-@Log
 public class UserController {
 
     private final UserService userService;
@@ -41,21 +38,6 @@ public class UserController {
         this.userDtoMapper = dtoMapper;
         this.qrCodeService = qrCodeService;
         this.qrCodeDtoMapper = qrCodeDtoMapper;
-    }
-
-    @GetMapping("/roles")
-    Iterable<Role> getUserRolesResponse() {
-        return userService.getAllRoles();
-    }
-
-    @GetMapping("/statuses")
-    Iterable<Status> getUserStatusesResponse() {
-        return userService.getAllStatuses();
-    }
-
-    @GetMapping("/providers")
-    Iterable<SocialProviderEnum> getUserLoginProvidersResponse() {
-        return userService.getAllProviders();
     }
 
     @GetMapping("/list")
@@ -79,14 +61,10 @@ public class UserController {
     ResponseUserDto getUserResponse(
             @PathVariable("uuid") UUID uuid
     ) {
-        Optional<User> optionalUser = userService.findById(uuid);
-
-        if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("User [" + uuid + "] not found");
-        }
 
         return userDtoMapper.mapUserToDto(
-                optionalUser.get()
+                userService.findById(uuid)
+                        .orElseThrow(() -> new IllegalArgumentException("User [" + uuid + "] not found"))
         );
     }
 
@@ -109,16 +87,12 @@ public class UserController {
             @PathVariable("uuid") UUID uuid,
             @Valid @RequestBody RequestUpdateUserDto userDto
     ) {
-        Optional<User> optionalUser = userService.findById(uuid);
-
-        if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("User [" + uuid + "] not found");
-        }
 
         return userDtoMapper.mapUserToDto(
                 userService.saveUser(
                         userDtoMapper.mapUpdateDtoToUser(
-                                optionalUser.get(),
+                                userService.findById(uuid)
+                                        .orElseThrow(() -> new IllegalArgumentException("User [" + uuid + "] not found")),
                                 userDto
                         )
                 )
@@ -133,15 +107,12 @@ public class UserController {
 //            @RequestParam(defaultValue = "QR_CODE", required = false) BarcodeFormat barcodeFormat,
             @RequestParam(defaultValue = "png", required = false) ImageFormatDto imageFormat
     ) throws WriterException, IOException {
-        Optional<User> optionalUser = userService.findById(uuid);
+        User user = userService.findById(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("User [" + uuid + "] not found"));
 
-        if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("User [" + uuid + "] not found");
-        }
-
-        String text = "uuid=" + optionalUser.get().getUuid() + "&"
+        String text = "uuid=" + user.getUuid() + "&"
                 + "name=" + URLEncoder.encode(
-                optionalUser.get().getName(),
+                user.getName(),
                 StandardCharsets.UTF_8
         );
 

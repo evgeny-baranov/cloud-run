@@ -24,16 +24,20 @@ public class CampaignServiceImpl implements CampaignService {
 
     private final CampaignRepository campaignRepository;
 
+    private final CustomerService customerService;
+
     public CampaignServiceImpl(
             CampaignRepository campaignRepository,
             ActionRepository actionRepository,
             ActionTypeRepository actionTypeRepository,
-            GenericCache<ActionType, ActionTypeEnum, ActionTypeRepository> actionCache
+            GenericCache<ActionType, ActionTypeEnum, ActionTypeRepository> actionCache,
+            CustomerService customerService
     ) {
         this.campaignRepository = campaignRepository;
         this.actionRepository = actionRepository;
         this.actionTypeRepository = actionTypeRepository;
         this.actionCache = actionCache;
+        this.customerService = customerService;
     }
 
     @PostConstruct
@@ -51,6 +55,22 @@ public class CampaignServiceImpl implements CampaignService {
         });
 
         actionCache.refresh();
+
+        for (int i = 0; i < 3; i++) {
+            Campaign c = new Campaign(
+                    "Campaign #" + i,
+                    customerService.getOwner()
+            );
+            c = saveCampaign(c);
+            for (int i2 = 0; i2 < 3; i2++) {
+                Action a = new Action();
+                a.setName("Action #" + i + "." + i2);
+                a.setType(ActionTypeEnum.USER_INVITE);
+                c.addAction(a);
+                saveAction(a);
+            }
+
+        }
     }
 
     @Override
