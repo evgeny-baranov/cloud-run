@@ -7,6 +7,7 @@ import com.lp.domain.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,11 +23,11 @@ public interface UserService {
             String sortDirection
     );
 
-    Iterable<Role> getAllRoles();
+    Collection<Role> getAllRoles();
 
-    Iterable<Status> getAllStatuses();
+    Collection<Status> getAllStatuses();
 
-    Iterable<SocialProviderEnum> getAllProviders();
+    Collection<SocialProviderEnum> getAllProviders();
 
     Optional<User> findByEmail(String email);
 

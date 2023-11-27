@@ -12,6 +12,7 @@ import lombok.extern.java.Log;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @RestController
@@ -185,5 +186,19 @@ public class CustomerController {
                         )
                 )
         );
+    }
+
+    @GetMapping("/{uuid}/campaign/{campaignUuid}/action")
+    Collection<ResponseActionDto> putCustomerCampaignActionsListResponse(
+            @PathVariable("uuid") UUID uuid,
+            @PathVariable("campaignUuid") UUID campaignUuid
+    ) {
+        Customer customer = customerService.findByUuid(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("Customer [" + uuid + "] not found"));
+
+        Campaign campaign = campaignService.findByUuid(campaignUuid)
+                .orElseThrow(() -> new IllegalArgumentException("Campaign [" + campaignUuid + "] not found"));
+
+        return campaign.getActions().stream().map(customerDtoMapper::mapActionToDto).toList();
     }
 }

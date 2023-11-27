@@ -88,16 +88,16 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    public Iterable<Role> getAllRoles() {
+    public Collection<Role> getAllRoles() {
         return roleCache.getAll();
     }
 
-    public Iterable<Status> getAllStatuses() {
+    public Collection<Status> getAllStatuses() {
         return statusCache.getAll();
     }
 
     @Override
-    public Iterable<SocialProviderEnum> getAllProviders() {
+    public Collection<SocialProviderEnum> getAllProviders() {
         return Arrays.stream(SocialProviderEnum.values()).toList();
     }
 

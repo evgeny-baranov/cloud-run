@@ -48,14 +48,20 @@ public class CampaignServiceImpl implements CampaignService {
     public void initActionTypes() {
         Arrays.stream(ActionTypeEnum.values()).forEach(actionTypeName -> {
             if (actionTypeRepository.findByName(actionTypeName).isEmpty()) {
+                ActionType actionType = new ActionType(actionTypeName);
+                // TODO: for tests
+                actionType.getSettings().add("actionTypeSetting1");
+                actionType.getSettings().add("actionTypeSetting2");
+
                 this.actionTypeRepository.save(
-                        new ActionType(actionTypeName)
+                        actionType
                 );
             }
         });
 
         actionCache.refresh();
 
+        // TODO: for test
         for (int i = 0; i < 3; i++) {
             Campaign c = new Campaign(
                     "Campaign #" + i,
@@ -66,6 +72,8 @@ public class CampaignServiceImpl implements CampaignService {
                 Action a = new Action();
                 a.setName("Action #" + i + "." + i2);
                 a.setType(ActionTypeEnum.USER_INVITE);
+                a.getSettings().set("str", "str " + i2);
+                a.getSettings().set("num", i2);
                 c.addAction(a);
                 saveAction(a);
             }

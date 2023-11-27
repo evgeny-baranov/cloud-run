@@ -1,11 +1,14 @@
 package com.lp.web.dto.mappers;
 
+import com.lp.domain.model.Action;
 import com.lp.domain.model.Campaign;
 import com.lp.domain.model.Customer;
 import com.lp.web.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 public class CustomerDtoMapper extends AbstractDtoMapper {
@@ -80,5 +83,19 @@ public class CustomerDtoMapper extends AbstractDtoMapper {
         campaign.setName(dto.getName());
 
         return campaign;
+    }
+
+    public ResponseActionDto mapActionToDto(Action action) {
+        Map<String, Object> settings = action.getSettings().getMap();
+        action.getType().getSettings().forEach(key -> {
+            settings.putIfAbsent(key, null);
+        });
+
+        return ResponseActionDto.builder()
+                .uuid(action.getUuid())
+                .name(action.getName())
+                .type(action.getType().getName())
+                .settings(action.getSettings().getMap())
+                .build();
     }
 }
