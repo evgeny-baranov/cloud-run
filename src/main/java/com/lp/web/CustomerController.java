@@ -37,7 +37,7 @@ public class CustomerController {
     }
 
     @GetMapping("/")
-    PageDto<ResponseCustomerDto> getCustomerListResponse(
+    public PageDto<ResponseCustomerDto> getCustomerListResponse(
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam(defaultValue = "name") String sortBy,
@@ -54,7 +54,7 @@ public class CustomerController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseCustomerDto getCustomerResponse(
+    public ResponseCustomerDto getCustomerResponse(
             @Valid @RequestBody RequestCreateCustomerDto dto
     ) {
         return customerDtoMapper.mapCustomerToDto(
@@ -75,7 +75,7 @@ public class CustomerController {
             path = "/{uuid}",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    ResponseCustomerDto putCustomerResponse(
+    public ResponseCustomerDto putCustomerResponse(
             @PathVariable("uuid") UUID uuid,
             @Valid @RequestBody RequestUpdateCustomerDto dto
     ) {
@@ -93,7 +93,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{uuid}")
-    ResponseCustomerDto getCustomerResponse(
+    public ResponseCustomerDto getCustomerResponse(
             @PathVariable("uuid") UUID uuid
     ) {
         Customer customer = customerService.findByUuid(uuid)
@@ -105,7 +105,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{uuid}/referral")
-    PageDto<ResponseCustomerDto> getCustomerReferralsResponse(
+    public PageDto<ResponseCustomerDto> getCustomerReferralsResponse(
             @PathVariable("uuid") UUID uuid,
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "10") int pageSize,
@@ -127,7 +127,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{uuid}/campaign")
-    PageDto<ResponseCampaignDto> getCustomerCampaignResponse(
+    public PageDto<ResponseCampaignDto> getCustomerCampaignResponse(
             @PathVariable("uuid") UUID uuid,
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "10") int pageSize,
@@ -149,7 +149,7 @@ public class CustomerController {
     }
 
     @PostMapping("/{uuid}/campaign")
-    ResponseCampaignDto postCustomerCampaignResponse(
+    public ResponseCampaignDto postCustomerCampaignResponse(
             @PathVariable("uuid") UUID uuid,
             @Valid @RequestBody RequestCreateCampaignDto dto
     ) {
@@ -167,7 +167,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{uuid}/campaign/{campaignUuid}")
-    ResponseCampaignDto putCustomerCampaignResponse(
+    public ResponseCampaignDto putCustomerCampaignResponse(
             @PathVariable("uuid") UUID uuid,
             @PathVariable("campaignUuid") UUID campaignUuid,
             @Valid @RequestBody RequestUpdateCampaignDto dto
@@ -191,7 +191,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{uuid}/campaign/{campaignUuid}/action")
-    Collection<ResponseActionDto> putCustomerCampaignActionsListResponse(
+    public Collection<ResponseActionDto> putCustomerCampaignActionsListResponse(
             @PathVariable("uuid") UUID uuid,
             @PathVariable("campaignUuid") UUID campaignUuid
     ) {

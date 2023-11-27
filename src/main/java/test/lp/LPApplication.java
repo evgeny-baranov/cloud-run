@@ -1,4 +1,4 @@
-package cloudcode.helloworld;
+package test.lp;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.servers.Server;
@@ -21,15 +21,14 @@ import java.util.Collections;
 @EnableJpaRepositories(basePackages = "com.lp.domain")
 @ComponentScan(basePackages = {
         "com.lp.web",
-        "com.lp.domain",
-        "com.lp.secrets"
+        "com.lp.domain"
 })
 @OpenAPIDefinition(servers = {
         @Server(url = "/", description = "Default Server URL")
 })
-public class TestApplication {
+public class LPApplication {
 
-    private static final Logger logger = LoggerFactory.getLogger(TestApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(LPApplication.class);
 
     public static void main(final String[] args) {
         String port = System.getenv("PORT");
@@ -37,7 +36,7 @@ public class TestApplication {
             port = "8080";
             logger.warn("$PORT environment variable not set, defaulting to 8080");
         }
-        SpringApplication app = new SpringApplication(TestApplication.class);
+        SpringApplication app = new SpringApplication(LPApplication.class);
         app.setDefaultProperties(Collections.singletonMap("server.port", port));
 
         // Start the Spring Boot application.

@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    PageDto<ResponseUserDto> getUserListResponse(
+    public PageDto<ResponseUserDto> getUserListResponse(
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam(defaultValue = "name") String sortBy,
@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @GetMapping("/{uuid}")
-    ResponseUserDto getUserResponse(
+    public ResponseUserDto getUserResponse(
             @PathVariable("uuid") UUID uuid
     ) {
 
@@ -69,7 +69,7 @@ public class UserController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseUserDto postUserResponse(
+    public ResponseUserDto postUserResponse(
             @Valid @RequestBody RequestCreateUserDto userDto
     ) {
         return userDtoMapper.mapUserToDto(
@@ -83,7 +83,7 @@ public class UserController {
     }
 
     @PutMapping("{uuid}")
-    ResponseUserDto putUserResponse(
+    public ResponseUserDto putUserResponse(
             @PathVariable("uuid") UUID uuid,
             @Valid @RequestBody RequestUpdateUserDto userDto
     ) {

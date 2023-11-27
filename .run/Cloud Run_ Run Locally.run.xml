@@ -31,4 +31,36 @@
     <option name="skaffoldWatchMode" value="ON_DEMAND" />
     <method v="2" />
   </configuration>
+  <configuration default="false" name="Cloud Run: Run Locally" type="CloudCodeCloudRunConfigurationType" factoryName="CloudCodeCloudRunDevelopConfigurationFactory" focusToolWindowBeforeRun="true" show_console_on_std_err="false" show_console_on_std_out="false" imageBuilder="{&quot;name&quot;:&quot;Docker&quot;,&quot;payload&quot;:{&quot;path&quot;:&quot;Dockerfile&quot;}}">
+    <option name="allowRunningInParallel" value="false" />
+    <option name="buildpacksEnv">
+      <map />
+    </option>
+    <option name="cloudSqlConnections">
+      <list />
+    </option>
+    <option name="cpuAllocated" value="NO_LIMIT" />
+    <option name="dockerBuildArgs">
+      <map />
+    </option>
+    <option name="dockerTarget" value="" />
+    <option name="environmentVariables">
+      <map>
+        <entry key="PORT" value="8080" />
+      </map>
+    </option>
+    <option name="loadingAvailableBuilders" value="false" />
+    <option name="mappings">
+      <list />
+    </option>
+    <option name="memoryAllocated" value="MIB_256" />
+    <option name="projectPathOnTarget" />
+    <option name="selectedOptions">
+      <list />
+    </option>
+    <option name="serviceAccount" value="" />
+    <option name="serviceName" value="cloud-run-1" />
+    <option name="skaffoldWatchMode" value="ON_DEMAND" />
+    <method v="2" />
+  </configuration>
 </component>
