@@ -76,11 +76,11 @@ public class User extends AbstractUuidEntity {
     }
 
     public void addRole(Role role) {
-        if (!haveRole(role)) {
-            UserRole ur = new UserRole();
-            ur.setUser(this);
-            ur.setRole(role);
-            roles.add(ur);
+        if (roles.stream().noneMatch(userRole -> userRole.getRole().equals(role))) {
+            UserRole userRole = new UserRole();
+            userRole.setUser(this);
+            userRole.setRole(role);
+            roles.add(userRole);
         }
     }
 
