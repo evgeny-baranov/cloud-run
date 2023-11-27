@@ -13,4 +13,6 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
     Page<Campaign> findByCustomer(Customer customer, Pageable pageable);
 
     Optional<Campaign> findByUuid(UUID uuid);
+
+    Optional<Campaign> findByCustomerAndUuid(Customer customer, UUID uuid);
 }

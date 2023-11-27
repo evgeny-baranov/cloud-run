@@ -175,8 +175,10 @@ public class CustomerController {
         Customer customer = customerService.findByUuid(uuid)
                 .orElseThrow(() -> new IllegalArgumentException("Customer [" + uuid + "] not found"));
 
-        Campaign campaign = campaignService.findByUuid(campaignUuid)
-                .orElseThrow(() -> new IllegalArgumentException("Campaign [" + campaignUuid + "] not found"));
+        Campaign campaign = campaignService.findByCustomerAndUuid(
+                customer,
+                campaignUuid
+        ).orElseThrow(() -> new IllegalArgumentException("Campaign [" + campaignUuid + "] not found"));
 
         return customerDtoMapper.mapCampaignToDto(
                 campaignService.saveCampaign(
@@ -196,8 +198,10 @@ public class CustomerController {
         Customer customer = customerService.findByUuid(uuid)
                 .orElseThrow(() -> new IllegalArgumentException("Customer [" + uuid + "] not found"));
 
-        Campaign campaign = campaignService.findByUuid(campaignUuid)
-                .orElseThrow(() -> new IllegalArgumentException("Campaign [" + campaignUuid + "] not found"));
+        Campaign campaign = campaignService.findByCustomerAndUuid(
+                customer,
+                campaignUuid
+        ).orElseThrow(() -> new IllegalArgumentException("Campaign [" + campaignUuid + "] not found"));
 
         return campaign.getActions().stream().map(customerDtoMapper::mapActionToDto).toList();
     }

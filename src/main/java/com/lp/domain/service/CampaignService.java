@@ -2,6 +2,7 @@ package com.lp.domain.service;
 
 import com.lp.domain.model.Action;
 import com.lp.domain.model.Campaign;
+import com.lp.domain.model.Customer;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -20,4 +21,8 @@ public interface CampaignService {
     Collection<Campaign> getAllCampaigns();
 
     Optional<Campaign> findByUuid(UUID uuid);
+
+    Optional<Campaign> findByCustomerAndUuid(
+            Customer customer,
+            UUID uuid);
 }

@@ -82,6 +82,7 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     @Override
+    @Transactional
     public Action saveAction(Action action) {
         ActionType type = actionCache.get(
                 action.getType().getName()
@@ -116,5 +117,11 @@ public class CampaignServiceImpl implements CampaignService {
 
     public Optional<Campaign> findByUuid(UUID uuid) {
         return campaignRepository.findByUuid(uuid);
+    }
+
+    public Optional<Campaign> findByCustomerAndUuid(
+            Customer customer,
+            UUID uuid) {
+        return campaignRepository.findByCustomerAndUuid(customer, uuid);
     }
 }

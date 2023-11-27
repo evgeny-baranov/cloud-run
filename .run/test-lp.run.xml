@@ -1,9 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="TestApplication" type="Application" factoryName="Application" focusToolWindowBeforeRun="true" nameIsGenerated="true">
-    <option name="ALTERNATIVE_JRE_PATH" value="17" />
+  <configuration default="false" name="test-lp" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="corretto-17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="cloudcode.helloworld.TestApplication" />
     <module name="app-test" />
+    <target name="@@@LOCAL@@@" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="cloudcode.helloworld.*" />
