@@ -87,9 +87,7 @@ public class CustomerDtoMapper extends AbstractDtoMapper {
 
     public ResponseActionDto mapActionToDto(Action action) {
         Map<String, Object> settings = action.getSettings().getMap();
-        action.getType().getSettings().forEach(key -> {
-            settings.putIfAbsent(key, null);
-        });
+        action.getType().getSettings().forEach(key -> settings.putIfAbsent(key, null));
 
         return ResponseActionDto.builder()
                 .uuid(action.getUuid())
