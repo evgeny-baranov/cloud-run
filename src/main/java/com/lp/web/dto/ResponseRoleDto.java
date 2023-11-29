@@ -13,5 +13,5 @@ import java.util.Collection;
 @NoArgsConstructor
 public class ResponseRoleDto {
     RoleEnum name;
-    Collection<String> privileges = new ArrayList<>();
+    Collection<String> privileges;
 }
