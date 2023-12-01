@@ -21,7 +21,8 @@ import java.util.Collections;
 @EnableJpaRepositories(basePackages = "com.lp.domain")
 @ComponentScan(basePackages = {
         "com.lp.web",
-        "com.lp.domain"
+        "com.lp.domain",
+        "test.lp"
 })
 @OpenAPIDefinition(servers = {
         @Server(url = "/", description = "Default Server URL")
@@ -43,6 +44,6 @@ public class LPApplication {
         app.run(args);
 
         logger.info(
-                "Hello from Cloud Run! The container started successfully and is listening for HTTP requests on " + port);
+                "Hello from LP! The container started successfully and is listening for HTTP requests on " + port);
     }
 }

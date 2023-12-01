@@ -21,4 +21,4 @@ FROM openjdk:17
 COPY --from=build-env /app/target/app-test-*.jar /app-test.jar
 ENV GOOGLE_APPLICATION_CREDENTIALS=/app/application_default_credentials.json
 # Run the web service on container startup.
-ENTRYPOINT ["java", "-jar", "/app-test.jar"]
+CMD ["java", "-jar", "/app-test.jar"]
