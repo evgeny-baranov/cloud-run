@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  mysql:
+    image: 'mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=lp'
+      - 'MYSQL_PASSWORD=lp'
+      - 'MYSQL_ROOT_PASSWORD=root'
+      - 'MYSQL_USER=lp'
+    ports:
+      - '3306:3306'

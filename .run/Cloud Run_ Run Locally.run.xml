@@ -1,16 +1,12 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Cloud Run: Run Locally" type="CloudCodeCloudRunConfigurationType" factoryName="CloudCodeCloudRunDevelopConfigurationFactory" focusToolWindowBeforeRun="true" show_console_on_std_err="false" show_console_on_std_out="false" imageBuilder="{&quot;name&quot;:&quot;Docker&quot;,&quot;payload&quot;:{&quot;path&quot;:&quot;Dockerfile&quot;}}">
     <option name="allowRunningInParallel" value="false" />
-    <option name="buildpacksEnv">
-      <map />
-    </option>
+    <option name="buildpacksEnv" />
     <option name="cloudSqlConnections">
       <list />
     </option>
     <option name="cpuAllocated" value="NO_LIMIT" />
-    <option name="dockerBuildArgs">
-      <map />
-    </option>
+    <option name="dockerBuildArgs" />
     <option name="dockerTarget" value="" />
     <option name="environmentVariables">
       <map>
