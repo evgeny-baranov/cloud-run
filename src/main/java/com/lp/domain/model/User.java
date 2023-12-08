@@ -2,7 +2,11 @@ package com.lp.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,11 +15,10 @@ import java.util.Set;
         exclude = {"status", "roles"}
 )
 @Entity
-@Table(name = "users", catalog = "testdb")
 @Getter
 @Setter
 @NoArgsConstructor
-public class User extends AbstractUuidEntity {
+public class User extends AbstractUuidEntity implements UserDetails {
 
     @Column(nullable = false)
     private String name;
@@ -94,5 +97,46 @@ public class User extends AbstractUuidEntity {
         this.name = name;
         this.email = email;
         this.status = new Status(status);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles().stream().map(role -> new SimpleGrantedAuthority(
+                role.getRole().getName().name()
+        )).toList();
+    }
+
+    @Override
+    public String getPassword() {
+        return "null";
+    }
+
+    @Override
+    public String getUsername() {
+        return this.getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        // todo: use status
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        // todo: use status
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        // todo: use status
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        // todo: use status
+        return true;
     }
 }

@@ -5,6 +5,7 @@ import com.lp.domain.model.SocialProviderEnum;
 import com.lp.domain.model.Status;
 import com.lp.domain.model.User;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -12,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     User saveUser(User user);
 

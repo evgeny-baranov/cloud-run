@@ -11,7 +11,6 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "role", catalog = "testdb")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,12 +31,6 @@ public class Role extends AbstractEntity {
     private Set<UserRole> roleUsers = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "roles_privileges",
-            joinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "privilege_id", referencedColumnName = "id"))
     private Collection<Privilege> privileges = new HashSet<>();
 
     public Role(RoleEnum name) {

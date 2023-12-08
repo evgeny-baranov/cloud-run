@@ -1,9 +1,9 @@
 package com.lp.domain.service;
 
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

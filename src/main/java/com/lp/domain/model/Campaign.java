@@ -2,14 +2,16 @@ package com.lp.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "campaign", catalog = "testdb")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,7 +19,6 @@ public class Campaign extends AbstractUuidEntity {
     String name;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
     @JsonIgnore
     @ToString.Exclude
     Customer customer;

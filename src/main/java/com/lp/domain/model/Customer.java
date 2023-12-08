@@ -1,9 +1,15 @@
 package com.lp.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +21,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name = "customer", catalog = "testdb")
 public class Customer extends AbstractUuidEntity {
 
     @NotBlank

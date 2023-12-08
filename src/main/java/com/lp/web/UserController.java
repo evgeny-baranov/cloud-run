@@ -1,7 +1,8 @@
 package com.lp.web;
 
 import com.google.zxing.WriterException;
-import com.lp.domain.model.*;
+import com.lp.domain.model.SortDirectionEnum;
+import com.lp.domain.model.User;
 import com.lp.domain.service.QrCodeService;
 import com.lp.domain.service.UserService;
 import com.lp.web.dto.*;

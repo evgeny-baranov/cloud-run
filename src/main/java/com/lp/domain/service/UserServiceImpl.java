@@ -5,10 +5,13 @@ import com.lp.domain.repository.RoleRepository;
 import com.lp.domain.repository.StatusRepository;
 import com.lp.domain.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -26,6 +29,9 @@ public class UserServiceImpl implements UserService {
     private final GenericCache<Role, RoleEnum, RoleRepository> roleCache;
 
     private final StatusRepository statusRepository;
+
+    @Getter
+    private User mainUser;
 
     public UserServiceImpl(
             UserRepository userRepository,
@@ -121,16 +127,18 @@ public class UserServiceImpl implements UserService {
     }
 
     public void initSystemUser() {
-        // TODO: save system users to secrets
-        User user = new User(
-                "system",
-                "info@baranov.eu"
-        );
-        user.setStatus(StatusEnum.STATUS_ACTIVE);
+        this.mainUser = userRepository.findByEmail("info@baranov.eu").orElseGet(() -> {
+            User user = new User(
+                    "system",
+                    "info@baranov.eu"
+            );
+            user.setStatus(StatusEnum.STATUS_ACTIVE);
 
-        Arrays.stream(RoleEnum.values()).forEach(user::addRole);
+            Arrays.stream(RoleEnum.values()).forEach(user::addRole);
 
-        saveUser(user);
+            saveUser(user);
+            return user;
+        });
     }
 
     public void initRoles() {
@@ -155,5 +163,11 @@ public class UserServiceImpl implements UserService {
         });
 
         statusCache.refresh();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 }

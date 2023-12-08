@@ -2,12 +2,10 @@ package com.lp.domain.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "action_summary", catalog = "testdb")
 @Getter
 @Setter
 @NoArgsConstructor
