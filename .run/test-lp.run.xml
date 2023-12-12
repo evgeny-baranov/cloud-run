@@ -16,7 +16,7 @@
     </method>
   </configuration>
   <configuration default="false" name="test-lp" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="ALTERNATIVE_JRE_PATH" value="17" />
+    <option name="ALTERNATIVE_JRE_PATH" value="corretto-17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <module name="app-test" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="test.lp.LPApplication" />

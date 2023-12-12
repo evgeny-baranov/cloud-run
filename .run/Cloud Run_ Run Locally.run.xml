@@ -33,7 +33,9 @@
       <map />
     </option>
     <option name="cloudSqlConnections">
-      <list />
+      <list>
+        <option value="lp-test2:europe-central2:lpdev" />
+      </list>
     </option>
     <option name="cpuAllocated" value="NO_LIMIT" />
     <option name="dockerBuildArgs">
@@ -54,7 +56,7 @@
     <option name="selectedOptions">
       <list />
     </option>
-    <option name="serviceAccount" value="" />
+    <option name="serviceAccount" value="lp-test-560@lp-test2.iam.gserviceaccount.com" />
     <option name="serviceName" value="cloud-run-1" />
     <option name="skaffoldWatchMode" value="ON_DEMAND" />
     <method v="2" />
