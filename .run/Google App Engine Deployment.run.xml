@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Google App Engine Deployment" type="gcp-app-engine-deploy" factoryName="Google App Engine Deployment" editBeforeRun="true" focusToolWindowBeforeRun="true" server-name="Google App Engine">
-    <deployment type="maven-build-source" name="app-test" project="lp-test2" version="auto">
+    <deployment type="filesystem-war-jar-module" project="lp-test2" version="auto">
       <settings cloudProjectName="lp-test2" environment="APP_ENGINE_FLEX" googleUsername="info@baranov.eu" moduleName="app-test" promote="true" stagedArtifactName="" stopPreviousVersion="true" userSpecifiedArtifactPath="C:\Users\eugene.baranov\IdeaProjects\cloud-run-1\target\app-test-1.0.0.jar" version="" />
     </deployment>
     <method v="2">
