@@ -126,6 +126,12 @@
             <artifactId>google-cloud-secretmanager</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.cloud.sql</groupId>
+            <artifactId>mysql-socket-factory-connector-j-8</artifactId>
+            <version>1.15.1</version>
+        </dependency>
+
         <!-- Starter for Stackriver Logging -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
