@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ApiController {
 
-    @Value("sm://test-secret")
+    @Value("${sm://test-secret}")
     private String secret;
 
     @GetMapping("/test")
