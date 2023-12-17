@@ -1,20 +1,4 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="test-lp" type="Application" factoryName="Application">
-    <option name="ALTERNATIVE_JRE_PATH" value="corretto-17" />
-    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-    <option name="MAIN_CLASS_NAME" value="test.lp.LPApplication" />
-    <module name="app-test" />
-    <target name="@@@LOCAL@@@" />
-    <extension name="coverage">
-      <pattern>
-        <option name="PATTERN" value="test.lp.*" />
-        <option name="ENABLED" value="true" />
-      </pattern>
-    </extension>
-    <method v="2">
-      <option name="Make" enabled="true" />
-    </method>
-  </configuration>
   <configuration default="false" name="test-lp" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ALTERNATIVE_JRE_PATH" value="corretto-17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />

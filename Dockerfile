@@ -6,6 +6,7 @@ FROM maven:3.8.1-openjdk-17-slim AS build-env
 WORKDIR /app
 # Copy the pom.xml file to download dependencies
 COPY pom.xml ./
+
 # Copy local code to the container image.
 COPY src ./src
 
@@ -19,6 +20,6 @@ FROM openjdk:17
 
 # Copy the jar to the production image from the builder stage.
 COPY --from=build-env /app/target/app-test-*.jar /app-test.jar
-ENV GOOGLE_APPLICATION_CREDENTIALS=/app/application_default_credentials.json
+
 # Run the web service on container startup.
 CMD ["java", "-jar", "/app-test.jar"]

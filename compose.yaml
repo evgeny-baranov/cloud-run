@@ -1,11 +1,19 @@
 version: '3.8'
+
 services:
-  mysql:
-    image: 'mysql:latest'
-    environment:
-      - 'MYSQL_DATABASE=lp'
-      - 'MYSQL_PASSWORD=lp'
-      - 'MYSQL_ROOT_PASSWORD=root'
-      - 'MYSQL_USER=lp'
-    ports:
-      - '3306:3306'
+  build:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+    - ~/.m2:/root/.m2
+    - .:/app
+#  mysql:
+#    image: 'mysql:latest'
+#    environment:
+#      - 'MYSQL_DATABASE=lp'
+#      - 'MYSQL_PASSWORD=lp'
+#      - 'MYSQL_ROOT_PASSWORD=root'
+#      - 'MYSQL_USER=lp'
+#    ports:
+#      - '3306:3306'

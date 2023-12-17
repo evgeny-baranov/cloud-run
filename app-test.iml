@@ -8,7 +8,7 @@
   <component name="FacetManager">
     <facet type="app-engine-flexible" name="Google App Engine Flexible">
       <configuration>
-        <option name="appYamlPath" value="C:\Users\eugene.baranov\IdeaProjects\cloud-run-1\app.yaml" />
+        <option name="appYamlPath" value="C:\Users\evgen\IdeaProjects\cloud-run\app.yaml" />
         <option name="dockerDirectory" value="" />
       </configuration>
     </facet>

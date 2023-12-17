@@ -109,9 +109,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @PostConstruct
     public void init() {
-        // TODO: store in secrets, create only if doesn't exist
-        Customer customer = new Customer();
-        customer.setName("LP");
-        this.owner = saveCustomer(customer);
+        this.customerRepository.findFirstByAffiliate_Empty().orElseGet(() -> {
+            // TODO: store in secrets, create only if doesn't exist
+            Customer customer = new Customer();
+            customer.setName("LP");
+            this.owner = saveCustomer(customer);
+            return this.getOwner();
+        });
     }
 }
